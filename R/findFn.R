@@ -44,7 +44,7 @@ findFn <- function(string, maxPages = 20, sortby = NULL,
     lnk <- sub("<dt>.*<strong><a href=\\\"(.*)\\\">R:.*$", "\\1", links)
     desc0 <- sub("<dt>.*<strong><a href=\\\".*\\\">R:(.*)</a>.*$", "\\1",
                 links)
-    desc <- gsub("(<strong.*>)|(</strong>)", "", desc0)
+    desc <- gsub("(<strong class=\"keyword\">)|(</strong>)", "", desc0)
     if((length(pac)<1) && (length(Date)>0)){
       tooMany <- (length(grep("Too many documents hit.  Ignored",
                               html))>0)
@@ -73,7 +73,7 @@ findFn <- function(string, maxPages = 20, sortby = NULL,
 ## 1.  Query
 ##
 #  1.1.  Set up
-  if(verbose) cat("retrieving page 1: ", fill = TRUE)
+#  if(verbose) cat("retrieving page 1: ", fill = TRUE)
   ans <- parseHTML(url)
   hits <- attr(ans, 'matches')
 #  hits <- max(0, attr(ans, 'hits'))
@@ -85,20 +85,20 @@ findFn <- function(string, maxPages = 20, sortby = NULL,
     attr(ans, 'string') <- string
     attr(ans, 'call') <- match.call()
     class(ans) <- c("findFn", "data.frame")
+    cat('found no matches', fill=TRUE)
     return(ans)
   }
-  if(verbose) cat(' found ', hits, ' match', c('', 'es')[1+(hits>1)],
+  if(verbose) cat('found ', hits, ' match', c('', 'es')[1+(hits>1)],
                   sep='')
+#                  ';  ', sep='', fill = FALSE)
 #  1.2.  Retrieve
   n <- min(ceiling(hits/20), maxPages)
   if(nrow(ans) < attr(ans, "matches")) {
-    if(verbose) cat('; retrieving', n, c('page', 'pages')[1+(n>1)])
-#                    fill = TRUE)
-    {
-      if(verbose){
-        if((20*n)<hits) cat(',', 20*n, 'matches.\n')
-        else cat('\n')
-      }
+    if(verbose) cat(';  retrieving', n, c('page', 'pages')[1+(n>1)])
+#                    ,fill = TRUE)
+    if(verbose){
+      if((20*n)<hits) cat(',', 20*n, 'matches.\n')
+      else cat('\n')
     }
     for(i in seq(2, length=n-1)) {
       {
@@ -109,7 +109,7 @@ findFn <- function(string, maxPages = 20, sortby = NULL,
       ans <- rbind(ans, parseHTML(url.i))
     }
     if(verbose>0) cat('\n')
-  }
+  } else cat('\n')
 ##
 ## 2.  Compute Summary
 ##

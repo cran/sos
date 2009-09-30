@@ -163,16 +163,16 @@ z <- findFn("spline", maxPages = 2)
 # alternative
 zq <- ???spline(2)
 
-# z and zq are identical
-# except for the 'call' atributes
-attr(zq, 'call') <- attr(z, 'call')
+%# z and zq are identical
+%# except for the 'call' atributes
+%attr(zq, 'call') <- attr(z, 'call')
 \dontshow{stopifnot(}
 all.equal(z, zq)
 \dontshow{)}
 
 # To search for 2 terms, not necessarily together:
 RSS <- findFn('RSiteSearch function', 1)
-matches(RSS) # list(nrow=15, matches=15)
+matches(RSS)
 # To search for an exact string, use braces:
 RSS. <- findFn('{RSiteSearch function}', 1)
 matches(RSS.) # list(nrow=0, matches=0)

@@ -79,7 +79,33 @@ PackageSum2.data.frame <- function(x,
     }
   }
 ##
-## 4.  Done
+## 4.  Parse Packaged and update Date
 ##
-  cbind(x, as.data.frame(xnew, stringsAsFactors=FALSE))
+  xnew. <- as.data.frame(xnew, stringsAsFactors=FALSE)
+  if(nx>0){
+    pkgd <- xnew[, 'Packaged']
+    nch <- nchar(pkgd)
+    dateCh <- pkgd[nch>0]
+    nd <- length(dateCh)
+    dateC <- dateCh
+    if(nd>0){
+      bl1 <- (substring(dateCh, 1,1)==' ')
+      dateCh[bl1] <- substring(dateCh[bl1], 2)
+      num. <- regexpr('[0123456789]', dateCh)
+      dateC[num.<9] <- substring(dateCh[num.<9], 1, 10)
+      mo <- substring(dateCh[num.>8], 5)
+      dd <- as.Date(mo, '%b %d %H:%M:%S %Y')
+      dateC[num.>8] <- as.character(dd)
+    }
+#    pkgd[nch>0] <- dateC
+#    xnew.$Packaged <- pkgd
+    x$Date[nch>0] <- dateC
+  }
+  xnew.$Packaged <- NULL
+##
+## 5.  Done
+##
+  x. <- cbind(x, xnew.)
+  rownames(x.) <- 1:nx
+  x.
 }

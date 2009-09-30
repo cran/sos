@@ -1,5 +1,6 @@
 \name{writeFindFn2xls}
 \alias{writeFindFn2xls}
+\alias{findFn2xls}
 \title{
   Write a findFn object to an Excel file
 }
@@ -12,13 +13,17 @@
 writeFindFn2xls(x,
        file.=paste(deparse(substitute(x)), 'xls', sep='.'),
        csv, ...)
+findFn2xls(x,
+       file.=paste(deparse(substitute(x)), 'xls', sep='.'),
+       csv, ...)
 }
 \arguments{
   \item{x}{
     An object of class \code{findFn}
   }
   \item{file.}{
-    Name of Excel file to create.
+    Name of Excel file to create.  If a file of this name already
+    exists, it will be overwritten.
   }
   \item{csv}{
     logical:  if TRUE, write three *.csv files rather than one
@@ -30,6 +35,9 @@ writeFindFn2xls(x,
   }
 }
 \details{
+  \code{findFn2xls} is an alias for \code{writeFindFn2xls};  both
+  functions do the same thing.
+
   1.  Create the sheets
 
   2.  if(csv | \code{!require(RODBC)} | cannot otherwise
@@ -61,7 +69,7 @@ splineSearch <- findFn("spline", maxPages = 1)
 
 writeFindFn2xls(splineSearch)
 
-writeFindFn2xls(splineSearch, csv=TRUE)
+findFn2xls(splineSearch, csv=TRUE)
 }
 \keyword{print}
 

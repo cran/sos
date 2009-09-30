@@ -1,8 +1,22 @@
+findFn2xls <- function(x,
+           file.=paste(deparse(substitute(x)), 'xls', sep='.'),
+           csv, ...) {
+  writeFindFn2xls(x, file.=file., csv=csv, ...)
+}
+
 writeFindFn2xls <- function(x,
            file.=paste(deparse(substitute(x)), 'xls', sep='.'),
            csv, ...) {
 ##
-## 1.  csv?
+## 1.  exists(file.)?
+##
+  if(file.exists(file.))file.remove(file.)
+  if(nrow(x)<1){
+    cat('No matches;  nothing written.\'n')
+    return(invisible(''))
+  }
+##
+## 2.  csv?
 ##
   sum2 <- PackageSum2(x)
   sum2$Date <- as.character(as.Date(sum2$Date))
@@ -23,7 +37,7 @@ writeFindFn2xls <- function(x,
     return(invisible(file.))
   }
 ##
-## 2.  Will WriteXLS work?
+## 3.  Will WriteXLS work?
 ##
   x2 <- lapply(x, function(x)
                if(is.numeric(x)) x else as.character(x))
@@ -34,7 +48,7 @@ writeFindFn2xls <- function(x,
     return(invisible(file.))
   }
 ##
-## 3.  How about RODBC?
+## 4.  How about RODBC?
 ##
   if(!require(RODBC)){
     warning('RODBC not available and WriteXS will not work;  ',
@@ -51,14 +65,14 @@ writeFindFn2xls <- function(x,
   xlsFile <- odbcConnectExcel(file., readOnly=FALSE)
   on.exit( odbcClose(xlsFile) )
 ##
-## 4.  Create the sheets
+## 5.  Create the sheets
 ##
   sum2. <- sqlSave(xlsFile, sum2, tablename='PackageSum2')
   x. <- sqlSave(xlsFile, as.data.frame(x2), tablename='findFn')
 #
   cl. <- sqlSave(xlsFile, cl, tablename='call')
 ##
-## 4.  Done
+## 6.  Done
 ##
   return(invisible(file.))
 }

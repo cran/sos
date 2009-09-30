@@ -61,7 +61,19 @@ PackageSum2(x,
 
   For a \code{data.frame} that is not an \code{findFn} object, add
   other columns from \code{attributes} of \code{packageDescription} for
-  installed packages named in the column \code{Package}.
+  installed packages named in the column \code{Package}.  Also, for any
+  packages that are installed, replace the \code{Date} with the
+  \code{Packaged} date.  The \code{Date} in Baron's RSiteSearch
+  database is the date of acquisition, which will typically be more
+  recent than the \code{Packaged} date provided the locally installed
+  package has the same version as that in Baron's database.  To get the
+  best information from \code{PackageSum2}, it is wise to first run both
+  \code{\link{installPackages}} to ensure that the packages of greatest
+  interest are installed locally and \code{update.packages()} to make
+  sure you have the latest versions installed locally.  Similarly, if
+  \code{PackageSum2} does not contain complete interest on a package of
+  interest, this can be fixed by installing the package and rerunning
+  \code{PackageSum2}.
 }
 \value{
   a data.frame with additional \code{fields} columns appended to a
@@ -71,6 +83,7 @@ PackageSum2(x,
 \seealso{
   \code{\link{findFn}}
   \code{\link{PackageSummary}}
+  \code{\link{installPackages}}
 }
 \examples{
 ##
@@ -96,10 +109,8 @@ attr(tst.findFn, 'PackageSummary') <- PackageSummary(tst.findFn)
 class(tst.findFn) <- c('findFn', 'data.frame')
 tst2. <- PackageSum2(tst.findFn)
 
-# row names are different from tst2, so fix ...
-row.names(tst2.) <- row.names(tst2)
 \dontshow{stopifnot(}
-all.equal(tst2, tst2.[names(tst2)])
+all.equal(tst2[, 1:7], tst2.[names(tst2)][, 1:7])
 \dontshow{)}
 
 }
