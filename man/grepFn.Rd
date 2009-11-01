@@ -10,14 +10,14 @@
 }
 \usage{
 grepFn(pattern, x, column='Function', ignore.case=FALSE,
-       extended=TRUE, perl=FALSE, value=TRUE, fixed=FALSE,
+       perl=FALSE, value=TRUE, fixed=FALSE,
        useBytes=FALSE, invert=FALSE)
 }
 \arguments{
   \item{x}{
     a matrix or data.frame containing a column named \code{column}.
   }
-  \item{pattern, ignore.case, extended, perl, fixed, useBytes, invert}{
+  \item{pattern, ignore.case, perl, fixed, useBytes, invert}{
     as for \code{grep}
   }
   \item{column}{
