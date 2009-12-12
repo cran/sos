@@ -18,7 +18,14 @@ findFn <- function(string, maxPages = 20, sortby = NULL,
 ##
   quiet <- (verbose<2)
   parseHTML <- function(url) {
-    code <- download.file(url, tmpfile, quiet = quiet)
+    code <- try(download.file(url, tmpfile, quiet = quiet))
+    if(class(code)=='try-error'){
+      ch0 <- character(0)
+      ans <- data.frame(Package = ch0, Function = ch0, Date=ch0,
+                   Score = numeric(0), Description = ch0, Link = ch0)
+      attr(ans, "matches") <- 0
+      return(ans)
+    }
     if(code != 0) stop("error downloading file")
     html <- scan(tmpfile, what = "", quiet = quiet, sep = "\n")
     hits <- as.numeric(sub("^.*<!-- HIT -->(.*)<!-- HIT -->.*$", "\\1",
@@ -78,16 +85,16 @@ findFn <- function(string, maxPages = 20, sortby = NULL,
   hits <- attr(ans, 'matches')
 #  hits <- max(0, attr(ans, 'hits'))
 #  If no hits, return
-  if(length(hits) < 1) {
-    attr(ans, 'matches') <- 0
-    pkgSum <- PackageSummary(ans)
-    attr(ans, 'PackageSummary') <- pkgSum
-    attr(ans, 'string') <- string
-    attr(ans, 'call') <- match.call()
-    class(ans) <- c("findFn", "data.frame")
-    cat('found no matches', fill=TRUE)
-    return(ans)
-  }
+#  if((length(hits) < 1) || (hits<1)) {
+#    attr(ans, 'matches') <- 0
+#    pkgSum <- PackageSummary(ans)
+#    attr(ans, 'PackageSummary') <- pkgSum
+#    attr(ans, 'string') <- string
+#    attr(ans, 'call') <- match.call()
+#    class(ans) <- c("findFn", "data.frame")
+#   cat('found no matches', fill=TRUE)
+#    return(ans)
+#  }
   if(verbose) cat('found ', hits, ' match', c('', 'es')[1+(hits>1)],
                   sep='')
 #                  ';  ', sep='', fill = FALSE)
