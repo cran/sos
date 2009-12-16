@@ -58,20 +58,21 @@ writeFindFn2xls <- function(x,
 ##
 ## 4.  How about RODBC?
 ##
-    if(!require(RODBC)){
+    if(require(RODBC)){
+      if(!(.Platform$OS.type=="windows")){
+        warning('Does not work on non-Windows platform without ',
+                'WriteXLS;  writing csv files')
+        writeFindFn2csv(x, file., ...)
+        return(invisible(file.))
+      }
+      xlsFile <- odbcConnectExcel(file., readOnly=FALSE)
+      on.exit( odbcClose(xlsFile) )
+    } else {
       warning('RODBC not available and WriteXS will not work;  ',
-            'writing csv files')
+              'writing csv files')
       writeFindFn2csv(x, file., ...)
       return(invisible(file.))
     }
-    if(!(.Platform$OS.type=="windows")){
-      warning('Does not work on non-Windows platform without WriteXLS;',
-            '  writing csv files')
-      writeFindFn2csv(x, file., ...)
-      return(invisible(file.))
-    }
-    xlsFile <- odbcConnectExcel(file., readOnly=FALSE)
-    on.exit( odbcClose(xlsFile) )
 ##
 ## 5.  Create the sheets
 ##

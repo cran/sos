@@ -83,6 +83,25 @@ findFn <- function(string, maxPages = 20, sortby = NULL,
 #  if(verbose) cat("retrieving page 1: ", fill = TRUE)
   ans <- parseHTML(url)
   hits <- attr(ans, 'matches')
+  if(length(hits)<1){
+    warning('HIT not found in HTML;  processing one page only.')
+    hits <- nrow(ans)
+    attr(ans, 'matches') <- hits
+  }else {
+    if(length(hits)>1) {
+      warning('HIT found more than once in first HTML page;  ',
+              'first 2 = ', hits[1], ', ', hits[2],
+              ';  processing one page only ')
+      hits <- nrow(ans)
+      attr(ans, 'matches') <- hits
+    }
+  }
+  if(is.na(hits)) {
+    warning('HIT found, not numeric, in the first HTML page;  ',
+            'processing one page only ')
+    hits <- nrow(ans)
+    attr(ans, 'matches') <- hits
+  }
 #  hits <- max(0, attr(ans, 'hits'))
 #  If no hits, return
 #  if((length(hits) < 1) || (hits<1)) {
