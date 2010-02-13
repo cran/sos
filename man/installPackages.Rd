@@ -8,7 +8,7 @@
   \code{Count} at least \code{minCount}.
 }
 \usage{
-installPackages(x, minCount=sqrt(x[['Count']][1]), ...)
+installPackages(x, minCount=sqrt(x[1, 'Count']), ...)
 }
 \arguments{
   \item{x}{
@@ -43,12 +43,12 @@ installPackages(x, minCount=sqrt(x[['Count']][1]), ...)
 %  especially expression (9), sec. 3, p. 7, accessed 2009.05.09.
 %}
 \examples{
-\dontrun{
 spl <- findFn("spline", maxPages = 2)
-# install all the most frequently cited packages
-installPackages(spl)
+# check the code but do not install anything:
+installPackages(spl, minCount=spl[1, 'Count']+1)
 
 # install ALL packages found
+\dontrun{
 installPackages(spl, 1)
 }
 

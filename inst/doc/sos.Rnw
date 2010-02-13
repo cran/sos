@@ -362,7 +362,8 @@ op <- options(width=80)
 @
 <<install-and-write,results=hide>>=
 splineAll <- findFn('spline', maxPages = 999)
-installPackages(splineAll)
+# Do not include in auto test
+#installPackages(splineAll)
 writeFindFn2xls(splineAll)
 @
 <<install-and-write-options-undo,echo=FALSE>>=

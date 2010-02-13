@@ -1,25 +1,27 @@
 findFn2xls <- function(x,
-           file.=paste(deparse(substitute(x)), 'xls', sep='.'),
-           csv, ...) {
-  writeFindFn2xls(x, file.=file., csv=csv, ...)
+                       file. = paste(deparse(substitute(x)), 'xls', sep = '.'),
+                       csv, ...) {
+  writeFindFn2xls(x, file. = file., csv = csv, ...)
 }
 
 writeFindFn2xls <- function(x,
-           file.=paste(deparse(substitute(x)), 'xls', sep='.'),
-           csv, ...) {
+                            file. = paste(deparse(substitute(x)), 'xls', sep = '.'),
+                            csv, ...) {
 ###
 ###
 ### I.  Define internal function
 ###
 ###
   wFF2x <- function(x,
-           file.=paste(deparse(substitute(x)), 'xls', sep='.'),
-           csv, ...) {
+                    file. = paste(deparse(substitute(x)), 'xls', sep='.'),
+                    csv, ...) {
 ##
 ## 1.  exists(file.)?
 ##
-    if(file.exists(file.))file.remove(file.)
-    if(nrow(x)<1){
+    if(file.exists(file.)) {
+      file.remove(file.)
+    }
+    if(nrow(x) < 1) {
       cat('No matches;  nothing written.\'n')
       return(invisible(''))
     }

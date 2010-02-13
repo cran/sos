@@ -175,6 +175,10 @@ RSS <- findFn('RSiteSearch function', 1)
 matches(RSS)
 # To search for an exact string, use braces:
 RSS. <- findFn('{RSiteSearch function}', 1)
-matches(RSS.) # list(nrow=0, matches=0)
+matches(RSS.) # list(nrow = 0, matches = 0)
+
+# example in which resulting page has some unicode characters
+Lambert <- findFn("Lambert")
+Lambert
 }
 \keyword{misc}
