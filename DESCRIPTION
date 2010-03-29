@@ -1,6 +1,6 @@
 Package: sos
 Title: sos
-Version: 1.2-5
+Version: 1.2-7
 Author: Spencer Graves, Sundar Dorai-Raj, and Romain Francois
 Maintainer: Spencer Graves <spencer.graves@prodsyse.com>
 Description: R related Search Engines
@@ -9,6 +9,6 @@ Depends: brew
 Suggests: RODBC, WriteXLS
 Repository: CRAN
 Repository/R-Forge/Project: rsitesearch
-Repository/R-Forge/Revision: 167
-Date/Publication: 2010-02-14 19:43:43
-Packaged: 2010-02-13 21:20:22 UTC; rforge
+Repository/R-Forge/Revision: 172
+Date/Publication: 2010-04-05 08:18:55
+Packaged: 2010-03-29 20:45:23 UTC; rforge

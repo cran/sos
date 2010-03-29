@@ -163,9 +163,6 @@ z <- findFn("spline", maxPages = 2)
 # alternative
 zq <- ???spline(2)
 
-%# z and zq are identical
-%# except for the 'call' atributes
-%attr(zq, 'call') <- attr(z, 'call')
 \dontshow{stopifnot(}
 all.equal(z, zq)
 \dontshow{)}
