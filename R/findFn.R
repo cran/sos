@@ -17,15 +17,24 @@ findFn <- function(string,
   ##      so sum(summary) may be less than hits.
   ##
   ##
-  ####################################################################
-  ## 0.  Set up
   ##
-  quiet <- (verbose < 2)
+  ## 1.  Define internal function
+  ## internal functions
+  parseLinks <- function(links) {
+    lnk <- sub("<dt>.*<strong><a href=\\\"(.*\\.html)\\\">.*$", "\\1",
+               links, useBytes = TRUE)
+    desc0 <- sub("<dt>.*<strong><a href=\\\".*\\\">R.*:(.*)</a>.*$", "\\1",
+                 links, useBytes = TRUE)
+    desc <- gsub("(<strong class=\"keyword\">)|(</strong>)|^[ ]+|[ ]+$", "",
+                 desc0, useBytes = TRUE)
+    list(link = lnk, description = desc)
+  }
   parseHTML <- function(href) {
     link <- try(url(href))
     on.exit(close(link))
     if (inherits(link, "try-error")) {
-      warning("An error occurred opening ", href)
+      warning("An error occurred opening ", href,
+              "\nfindFn needs Internet access;  is it available?")
       ch0 <- character(0)
       ans <- data.frame(Package = ch0,
                         Function = ch0,
@@ -36,7 +45,20 @@ findFn <- function(string,
       attr(ans, "matches") <- 0
       return(ans)
     }
-    html <- readLines(link)
+    html <- try(readLines(link))
+    if (inherits(html, "try-error")) {
+      warning("An error occurred in readLine(link), link = ", link,
+              "\nfindFn needs Internet access;  is it available?")
+      ch0 <- character(0)
+      ans <- data.frame(Package = ch0,
+                        Function = ch0,
+                        Date = ch0,
+                        Score = numeric(0),
+                        Description = ch0,
+                        Link = ch0)
+      attr(ans, "matches") <- 0
+      return(ans)
+    }
     hitPattern <- "^.*<!-- HIT -->(.*)<!-- HIT -->.*$"
     hitRows <- html[grep(hitPattern, html, useBytes = TRUE)]
     hits <- as.numeric(sub(hitPattern, "\\1", hitRows, useBytes = TRUE))
@@ -52,12 +74,7 @@ findFn <- function(string,
     scoreCh <- sub(scorePattern, "\\1", links, useBytes = TRUE)
     score <- as.numeric(scoreCh)
     Date <- sub("^.*<em>(.*)</em>.*$", "\\1", dates, useBytes = TRUE)
-    lnk <- sub("<dt>.*<strong><a href=\\\"(.*)\\\">R:.*$", "\\1",
-               links, useBytes = TRUE)
-    desc0 <- sub("<dt>.*<strong><a href=\\\".*\\\">R:(.*)</a>.*$", "\\1",
-                 links, useBytes = TRUE)
-    desc <- gsub("(<strong class=\"keyword\">)|(</strong>)", "",
-                 desc0, useBytes = TRUE)
+    pLinks <- parseLinks(links)
     if (length(pac) < 1 && length(Date) > 0) {
       countDocs <- grep("Too many documents hit. Ignored",
                         html, useBytes = TRUE)
@@ -73,14 +90,21 @@ findFn <- function(string,
                       Function = fun,
                       Date = strptime(Date, "%a, %d %b %Y %T"),
                       Score = score,
-                      Description = desc,
-                      Link = lnk)
+                      Description = pLinks$description,
+                      Link = pLinks$link)
     attr(ans, "matches") <- hits
     ans
   }
+  ## end internal functions
+  ##
+  quiet <- (verbose < 2)
+  ##
+  ## 2.  Set up query
+  ##
   if (substr(string, 1, 1) != "{") {
     string <- gsub(" ", "+", string)
-  } else {  ## scan(url(...)) fails with spaces
+  } else {
+    ## scan(url(...)) fails with spaces
     string <- gsub(" ", "%20", string)
   }
   fmt <- paste("http://search.r-project.org/cgi-bin/namazu.cgi?",
@@ -88,9 +112,9 @@ findFn <- function(string,
                sep = "")
   href <- sprintf(fmt, string)
   ##
-  ## 1.  Query
+  ## 3.  Query
   ##
-  ##  1.1.  Set up
+  ##  3.1.  Set up
   ans <- parseHTML(href)
   hits <- attr(ans, "matches")
   if (length(hits) < 1) {
@@ -116,7 +140,7 @@ findFn <- function(string,
     es <- if (hits == 1) "" else "es"
     cat("found ", hits, " match", es, sep = "")
   }
-  ##  1.2.  Retrieve
+  ##  3.2.  Retrieve
   n <- min(ceiling(hits/20), maxPages)
   if (nrow(ans) < attr(ans, "matches")) {
     if (verbose)
@@ -142,12 +166,12 @@ findFn <- function(string,
     cat("\n")
   }
   ##
-  ## 2.  Compute Summary
+  ## 4.  Compute Summary
   ##
   ans$Score <- as.numeric(as.character(ans$Score))
   pkgSum <- PackageSummary(ans)
   ##
-  ## 3.  Sort order
+  ## 5.  Sort order
   ##
   s0 <- c("Count", "MaxScore", "TotalScore", "Package",
           "Score", "Function", "Date", "Description", "Link")
@@ -161,7 +185,7 @@ findFn <- function(string,
     sortby <- s0[s1.]
   }
   ##
-  ## 4.  Merge(packageSum, ans)
+  ## 6.  Merge(packageSum, ans)
   ##
   packageSum <- pkgSum
   rownames(pkgSum) <- as.character(pkgSum$Package)
@@ -171,7 +195,7 @@ findFn <- function(string,
   rownames(pkgS2) <- NULL
   Ans <- cbind(as.data.frame(pkgS2), ans)
   ##
-  ## 5.  Sort Ans by "sort."
+  ## 7.  Sort Ans by "sort."
   ##
   Ans.num <- Ans[, c("Count", "MaxScore", "TotalScore", "Score")]
   ans.num <- cbind(as.matrix(Ans.num), Date=as.numeric(Ans$Date) )
@@ -182,7 +206,7 @@ findFn <- function(string,
   oSch <- do.call("order", ansKey[sortby])
   AnSort <- Ans[oSch, ]
   ##
-  ## 6.  attributes
+  ## 8.  attributes
   ##
   rownames(AnSort) <- NULL
   ##

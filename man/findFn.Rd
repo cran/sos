@@ -9,7 +9,9 @@
   Returns a data.frame from
   \code{\link[utils]{RSiteSearch}(string, "function")} which can be
   sorted and subsetted by user specifications and viewed in an HTML
-  table.
+  table.  The default sort puts first packages with the most matches
+  (\code{Count}), with ties broken using the sum of the match scores for
+  all the hits in that package (\code{TotalScore}), etc.
 }
 \usage{
 findFn(string, maxPages = 20, sortby = NULL, verbose = 1, ...)
@@ -80,7 +82,7 @@ findFn(string, maxPages = 20, sortby = NULL, verbose = 1, ...)
   \item{Columns}{
 
     \itemize{
-      \item{Count}{Total number of matches downloaded in this package}
+      \item{Count}{ Total number of matches downloaded in this package}
       \item{MaxScore}{
 	maximum of the \code{Score} over all help pages selected within
 	each \code{Package}.  See \code{Score} below or the Namazu
@@ -101,13 +103,13 @@ findFn(string, maxPages = 20, sortby = NULL, verbose = 1, ...)
 	Name of the help page found that meets the indicated search
 	criterion.
       }
-      \item{Date}{Date of the help page}
+      \item{Date}{ Date of the help page}
       \item{Score}{
 	Score returned by \code{RSiteSearch}, discussed in the Namazu
 	website (link below).
       }
-      \item{Description}{Title of the help page}
-      \item{Link}{Universal Resource Locator (URL) for the help page}
+      \item{Description}{ Title of the help page}
+      \item{Link}{ Universal Resource Locator (URL) for the help page}
     }
   }
 

@@ -73,6 +73,11 @@ de.s. <- des1 | de1
 all.equal(de.s, de.s.)
 \dontshow{)}
 
+\dontshow{
+# union with no data
+de0 <- unionFindFn(des1[numeric(0), ], de1[numeric(0), ])
+}
+
 # Keep only the common entries.
 de2 <- intersectFindFn(des1, de1)
 de2. <- des1 & de1
