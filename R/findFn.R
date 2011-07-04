@@ -41,7 +41,7 @@ findFn <- function(string,
                         Date = ch0,
                         Score = numeric(0),
                         Description = ch0,
-                        Link = ch0)
+                        Link = ch0, stringsAsFactors=FALSE)
       attr(ans, "matches") <- 0
       return(ans)
     }
@@ -55,13 +55,15 @@ findFn <- function(string,
                         Date = ch0,
                         Score = numeric(0),
                         Description = ch0,
-                        Link = ch0)
+                        Link = ch0, stringsAsFactors=FALSE)
       attr(ans, "matches") <- 0
       return(ans)
     }
+#   Find the hit count
     hitPattern <- "^.*<!-- HIT -->(.*)<!-- HIT -->.*$"
     hitRows <- html[grep(hitPattern, html, useBytes = TRUE)]
-    hits <- as.numeric(sub(hitPattern, "\\1", hitRows, useBytes = TRUE))
+    Hits <- as.numeric(sub(hitPattern, "\\1", hitRows, useBytes = TRUE))
+#   Find dates
     findDates <- grep("<strong>Date</strong>", html, useBytes = TRUE)
     dates <- html[findDates]
     links <- html[findDates - 2]
@@ -82,17 +84,21 @@ findFn <- function(string,
       if (tooMany) {
         warning("Too many documents hit.  Ignored")
       } else {
-        warning("SOFTWARE PROBLEM:  dates found without ", "content;  ignored.")
+        op <- 'SOFTWARE PROBLEM:  dates found without'
+        oops <- paste(op, 'content;  ignored.')
+        warning(oops)
       }
       Date <- Date[numeric(0)]
     }
-    ans <- data.frame(Package = pac,
+    Ans <- data.frame(Package = pac,
                       Function = fun,
                       Date = strptime(Date, "%a, %d %b %Y %T"),
                       Score = score,
                       Description = pLinks$description,
-                      Link = pLinks$link)
-    attr(ans, "matches") <- hits
+                      Link = pLinks$link, stringsAsFactors=FALSE)
+    oops <- (substring(pac, 1, 1)=='<')
+    ans <- Ans[!oops,]
+    attr(ans, "matches") <- Hits
     ans
   }
   ## end internal functions
@@ -108,7 +114,7 @@ findFn <- function(string,
     string <- gsub(" ", "%20", string)
   }
   fmt <- paste("http://search.r-project.org/cgi-bin/namazu.cgi?",
-               "query=%s&max=20&result=normal&sort=score&idxname=functions",
+          "query=%s&max=20&result=normal&sort=score&idxname=functions",
                sep = "")
   href <- sprintf(fmt, string)
   ##
@@ -116,37 +122,37 @@ findFn <- function(string,
   ##
   ##  3.1.  Set up
   ans <- parseHTML(href)
-  hits <- attr(ans, "matches")
-  if (length(hits) < 1) {
+  hits. <- attr(ans, "matches")
+  if (length(hits.) < 1) {
     warning("HIT not found in HTML;  processing one page only.")
-    hits <- nrow(ans)
-    attr(ans, "matches") <- hits
+    hits. <- nrow(ans)
+    attr(ans, "matches") <- hits.
   } else {
-    if (length(hits) > 1) {
+    if (length(hits.) > 1) {
       warning("HIT found more than once in first HTML page; ",
-              "first 2 = ", hits[1], ", ", hits[2],
+              "first 2 = ", hits.[1], ", ", hits.[2],
               ";  processing one page only")
-      hits <- nrow(ans)
-      attr(ans, "matches") <- hits
+      hits. <- nrow(ans)
+      attr(ans, "matches") <- hits.
     }
   }
-  if (is.na(hits)) {
+  if (is.na(hits.)) {
     warning("HIT found, not numeric, in the first HTML page; ",
             "processing one page only")
-    hits <- nrow(ans)
-    attr(ans, "matches") <- hits
+    hits. <- nrow(ans)
+    attr(ans, "matches") <- hits.
   }
   if (verbose) {
-    es <- if (hits == 1) "" else "es"
-    cat("found ", hits, " match", es, sep = "")
+    es <- if (hits. == 1) "" else "es"
+    cat("found ", hits., " match", es, sep = "")
   }
   ##  3.2.  Retrieve
-  n <- min(ceiling(hits/20), maxPages)
+  n <- min(ceiling(hits./20), maxPages)
   if (nrow(ans) < attr(ans, "matches")) {
     if (verbose)
       cat(";  retrieving", n, c("page", "pages")[1 + (n > 1)])
     if (verbose) {
-      if ((20 * n) < hits) {
+      if ((20 * n) < hits.) {
         cat(",", 20 * n, "matches.\n")
       } else {
         cat("\n")
@@ -210,7 +216,7 @@ findFn <- function(string,
   ##
   rownames(AnSort) <- NULL
   ##
-  attr(AnSort, "matches") <- hits
+  attr(AnSort, "matches") <- hits.
   attr(AnSort, "PackageSummary") <- packageSum
   attr(AnSort, "string") <- string
   attr(AnSort, "call") <- match.call()

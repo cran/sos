@@ -61,7 +61,7 @@ writeFindFn2xls <- function(x,
 ## 4.  How about RODBC?
 ##
     if(require(RODBC)){
-      if(!(.Platform$OS.type=="windows")){
+      if(.Platform$OS.type!="windows"){
         warning('Does not work on non-Windows platform without ',
                 'WriteXLS;  writing csv files')
         writeFindFn2csv(x, file., ...)
