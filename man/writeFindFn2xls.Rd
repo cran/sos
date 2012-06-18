@@ -38,18 +38,7 @@ findFn2xls(x,
   \code{findFn2xls} is an alias for \code{writeFindFn2xls};  both
   functions do the same thing.
 
-  1.  Create the sheets
 
-  2.  if(csv | \code{!require(RODBC)} | cannot otherwise
-  create an Excel file) write.csv with names ending '-sum.csv' for
-  \code{PackageSum2}, '.csv' for the main table, and '-call.csv' for the
-  \code{call} sheet.
-
-  3.  Open connection
-
-  4.  Write the sheets
-
-  5.  Done.
 }
 \value{
   The name of the file created is returned invisibly.
@@ -63,6 +52,8 @@ findFn2xls(x,
   \code{\link[RODBC]{odbcConnect}},
   \code{\link[RODBC]{sqlSave}},
   \code{\link[RODBC]{odbcClose}}
+%  \code{\link[dataframes2xls]{write.xls}}
+  \code{\link[WriteXLS]{WriteXLS}}
 }
 \examples{
 splineSearch <- findFn("spline", maxPages = 1)

@@ -38,42 +38,37 @@ PackageSum2.data.frame <- function(x,
   for(ip in seq(1, length=nx)){
     if(xP[ip] %in% instPkgs){
       pkgDesci <- packageDescription(x$Package[ip], lib.loc=lib.loc)
-      pkgHelp <- help(pac=x$Package[ip], lib.loc=lib.loc)
-      for(ic in seq(1, length=nf)){
-        if(fields[ic] == "Packaged"){
-          {
-            if(is.null(pkgDesci$Packaged))
+      pkgHelp <- try(help(package=x$Package[ip], lib.loc=lib.loc))
+      if(class(pkgHelp) != 'try-error'){
+        for(ic in seq(1, length=nf)){
+          if(fields[ic] == "Packaged"){
+            if(is.null(pkgDesci$Packaged)){
               pkgd <- (strsplit(pkgDesci$Built, ';')[[1]][3])
-            else
+            } else
               pkgd <- (strsplit(pkgDesci$Packaged, ';')[[1]][1])
-          }
-          xnew[ip, ic] <- pkgd
+            xnew[ip, ic] <- pkgd
 #          xout$Packaged[ip] <- pkgd
-        }
-        else
-          if(fields[ic] %in% names(pkgDesci))
-            xnew[ip, ic] <- pkgDesci[[fields[ic]]]
+          } else
+            if(fields[ic] %in% names(pkgDesci)){
+              xnew[ip, ic] <- pkgDesci[[fields[ic]]]
 #            xout[ip, fields[ic]] <- pkgDesci[[fields[ic]]]
-        else {
-          if(fields[ic] == 'helpPages'){
-            helpInfo2 <- pkgHelp$info[[2]]
-            nhr <- (length(helpInfo2) -
+            } else {
+              if(fields[ic] == 'helpPages'){
+                helpInfo2 <- pkgHelp$info[[2]]
+                nhr <- (length(helpInfo2) -
                     sum(substring(helpInfo2, 1, 1) == ' '))
-            xnew[ip, ic] <- nhr
-          }
-          else {
-            if(fields[ic] == 'vignette') {
-              vig <- (vignette(package=x$Package[ip])$results)
-              {
-                if(nrow(vig)>1){
-                  clps <- paste(vig[, 'Item'], collapse=', ')
-                  xnew[ip, ic] <- paste(nrow(vig), clps, sep=':  ')
+                xnew[ip, ic] <- nhr
+              } else {
+                if(fields[ic] == 'vignette') {
+                  vig <- (vignette(package=x$Package[ip])$results)
+                  if(nrow(vig)>1){
+                    clps <- paste(vig[, 'Item'], collapse=', ')
+                    xnew[ip, ic] <- paste(nrow(vig), clps, sep=':  ')
+                  } else if(nrow(vig)>0)
+                      xnew[ip, ic] <- vig[ 1, 'Title']
                 }
-                else if(nrow(vig)>0)
-                  xnew[ip, ic] <- vig[ 1, 'Title']
               }
             }
-          }
         }
       }
     }

@@ -101,6 +101,7 @@ findFn <- function(string,
     attr(ans, "matches") <- Hits
     ans
   }
+  ##
   ## end internal functions
   ##
   quiet <- (verbose < 2)
@@ -176,6 +177,10 @@ findFn <- function(string,
   ##
   ans$Score <- as.numeric(as.character(ans$Score))
   pkgSum <- PackageSummary(ans)
+  if(hits.>0){
+      nlk <- sum(pkgSum$Count)
+      cat('Downloaded', nlk, 'links in', nrow(pkgSum), 'packages.\n')
+  }
   ##
   ## 5.  Sort order
   ##
