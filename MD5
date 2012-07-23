@@ -1,12 +1,12 @@
-4d9ddfa11ebc11cb924a88a526b9c2d9 *DESCRIPTION
+0b305979110ec8fb2eaa46ef077847fb *DESCRIPTION
 e419c57631ccafa42a86de91d5a5f707 *NAMESPACE
 671c19deee85c33046530c1bc27571b5 *NEWS
 ca9d066131debffd3bd93f459ee930ec *R/Extract.findFn.R
 683c9d0337ce9e8ffd09a69b03b89434 *R/Ops.findFn.R
-6722a19f5029a983d7cb878b68fdf9a3 *R/PackageSum2.R
+e1ad33d4badaddc2303bca5c1b76ab04 *R/PackageSum2.R
 7cbddf3ffb3342021f0b3c68e7f3c5a6 *R/PackageSummary.R
 ae2da1ad190851faa068c522d1bae341 *R/back2ForwardSlash.R
-a27706d3dfb32f6f063f1ed2b152c9bb *R/findFn.R
+6201a134cad041dc786f033df3e5372e *R/findFn.R
 9880745c403892df5872941282f64db6 *R/findFn2.R
 8c6e4bf6ceeb75160be0cfea0cc92b94 *R/grepFn.R
 9ab0cef0af11c1c2ab2ec251564f491d *R/hits.R
@@ -20,7 +20,7 @@ d9f9fca2555d71fc4e51233fde61bdae *R/summary.findFn.R
 3c8119e4c111dd4bab8cf9001db49c24 *inst/brew/default/results.brew.html
 7bf92a8935a56c8b82836efb60bf7fbf *inst/brew/iframe/results.brew.html
 07ed97ef3be371b928a9c8271c99f838 *inst/doc/sos.Rnw
-fa823151309e8582ac03afa5675c1fc2 *inst/doc/sos.pdf
+3af8174c53875588c2509cbe1943485e *inst/doc/sos.pdf
 9a58bafaf153b32f1a664687841c5d82 *inst/js/sorttable.js
 89bd3b18d245c54f05f280f596ea2935 *inst/tests/example_back2ForwardSlash.txt
 faae1089f24b0a8a3044e1e78f870fa6 *man/Extract.findFn.Rd

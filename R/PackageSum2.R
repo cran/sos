@@ -38,7 +38,8 @@ PackageSum2.data.frame <- function(x,
   for(ip in seq(1, length=nx)){
     if(xP[ip] %in% instPkgs){
       pkgDesci <- packageDescription(x$Package[ip], lib.loc=lib.loc)
-      pkgHelp <- try(help(package=x$Package[ip], lib.loc=lib.loc))
+      pkgHelp <- try(help(package=x$Package[ip], lib.loc=lib.loc,
+                          help_type='text'))
       if(class(pkgHelp) != 'try-error'){
         for(ic in seq(1, length=nf)){
           if(fields[ic] == "Packaged"){
@@ -100,7 +101,22 @@ PackageSum2.data.frame <- function(x,
 ##
 ## 5.  Done
 ##
+  fixSpace <- function(x){
+      x. <- gsub('\n', ' ', x)
+      nx <- nchar(x.)
+      repeat{
+          x. <- gsub('  ', ' ', x.)
+          nx2 <- nchar(x.)
+          if(all(nx2==nx))break
+          nx <- nx2
+      }
+      x.
+  }
   x. <- cbind(x, xnew.)
   rownames(x.) <- 1:nx
+  x.$Title <- fixSpace(x.$Title)
+  x.$Author <- fixSpace(x.$Author)
+  x.$Maintainer <- fixSpace(x.$Maintainer)
+  x.$vignette <- fixSpace(x.$vignette)
   x.
 }
