@@ -62,6 +62,7 @@ findFn <- function(string,
 #   Find the hit count
     hitPattern <- "^.*<!-- HIT -->(.*)<!-- HIT -->.*$"
     hitRows <- html[grep(hitPattern, html, useBytes = TRUE)]
+#
     Hits <- as.numeric(sub(hitPattern, "\\1", hitRows, useBytes = TRUE))
 #   Find dates
     findDates <- grep("<strong>Date</strong>", html, useBytes = TRUE)
@@ -77,16 +78,21 @@ findFn <- function(string,
     score <- as.numeric(scoreCh)
     Date <- sub("^.*<em>(.*)</em>.*$", "\\1", dates, useBytes = TRUE)
     pLinks <- parseLinks(links)
-    if (length(pac) < 1 && length(Date) > 0) {
+#    if (length(pac) < 1 && length(Date) > 0) {
+    if (length(pac) < 1) {
       countDocs <- grep("Too many documents hit. Ignored",
                         html, useBytes = TRUE)
-      tooMany <- length(tooMany) > 0
+#      tooMany <- length(tooMany) > 0
+      tooMany <- (length(countDocs)>0)
       if (tooMany) {
+        Hits <- Inf
         warning("Too many documents hit.  Ignored")
       } else {
-        op <- 'SOFTWARE PROBLEM:  dates found without'
-        oops <- paste(op, 'content;  ignored.')
-        warning(oops)
+        if(length(Date)>0){
+            op <- 'SOFTWARE PROBLEM:  dates found without'
+            oops <- paste(op, 'content;  ignored.')
+            warning(oops)
+        }
       }
       Date <- Date[numeric(0)]
     }
@@ -149,7 +155,7 @@ findFn <- function(string,
   }
   ##  3.2.  Retrieve
   n <- min(ceiling(hits./20), maxPages)
-  if (nrow(ans) < attr(ans, "matches")) {
+  if((hits.<Inf) && (nrow(ans) < hits.)) {
     if (verbose)
       cat(";  retrieving", n, c("page", "pages")[1 + (n > 1)])
     if (verbose) {
@@ -179,7 +185,7 @@ findFn <- function(string,
   ##
   ans$Score <- as.numeric(as.character(ans$Score))
   pkgSum <- PackageSummary(ans)
-  if(hits.>0){
+  if((hits.<Inf) && (hits.>0)){
       nlk <- sum(pkgSum$Count)
       cat('Downloaded', nlk, 'links in', nrow(pkgSum), 'packages.\n')
   }

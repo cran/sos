@@ -31,16 +31,17 @@ writeFindFn2xls <- function(x,
                if(is.numeric(x)) x else as.character(x))
   x2. <- as.data.frame(x2, stringsAsFactors=FALSE)
 
-  df2x <- FALSE
-  WX <- FALSE
-  OB <- FALSE
+#  df2x <- FALSE # not used ...??
+#  WX <- FALSE
+#  OB <- FALSE
 ##
 ## 4.  Will WriteXLS work?
 ##
     if(require(WriteXLS)){
       WX <- TRUE
-      if(tP <- testPerl()){
-        WXo <- try(WriteXLS(c('sum2', 'x2.', 'cl'), ExcelFileName=file.,
+      if(tP <- WriteXLS::testPerl()){
+        WXo <- try(WriteXLS::WriteXLS(c('sum2', 'x2.', 'cl'),
+                 ExcelFileName=file.,
                  SheetNames=c('PackageSum2', 'findFn', 'call') ))
         if(class(WXo)!='try-error')return(invisible(file.))
       }
@@ -50,23 +51,52 @@ writeFindFn2xls <- function(x,
 ##
     if(require(RODBC)){
       RO <- TRUE
-      xlsFile <- try(odbcConnectExcel(file., readOnly=FALSE))
+      xlsFile <- try(RODBC::odbcConnectExcel(file., readOnly=FALSE))
       if(class(xlsFile)!='try-error'){
-        on.exit(odbcClose(xlsFile))
+        on.exit(RODBC::odbcClose(xlsFile))
 #   Create the sheets
-        sum2. <- try(sqlSave(xlsFile, sum2, tablename='PackageSum2'))
+        sum2. <- try(RODBC::sqlSave(xlsFile, sum2, tablename='PackageSum2'))
         if(class(sum2.)!='try-error'){
-          x. <- try(sqlSave(xlsFile, as.data.frame(x2), tablename='findFn'))
+          x. <- try(RODBC::sqlSave(xlsFile, as.data.frame(x2),
+                                   tablename='findFn'))
 #
           if(class(x.)!='try-error'){
-            cl. <- try(sqlSave(xlsFile, cl, tablename='call'))
+            cl. <- try(RODBC::sqlSave(xlsFile, cl, tablename='call'))
             if(class(cl.)!='try=error')return(invisible(file.))
           }
         }
       }
     }
 ##
-## 6.  Will dataframes2xls work?
+## 6.  XLConnect?
+##
+## R 3.0.1:  works for 32-bit but not 64
+#  if(require(XLConnect)){
+# ** require(XLConnect) generated an error with 64-bit R 3.0.1
+#    and I didn't test the rest of this code.
+#    wb <- try(loadWorkbook(file.))
+#    if(class(wb)!='try-error'){
+#      cS1 <- try(createSheet(wb, 'PackageSum2'))
+#      if(class(cS1)!='try-error'){
+#        wW1 <- try(writeWorksheet(wb, sum2, 'PackageSum2'))
+#        if(class(wW1)!='try-error'){
+#          cS2 <- createSheet(wb, 'findFn')
+#          wW2 <- writeWorksheet(wb, x2., 'findFn')
+#          cS3 <- createSheet(wb, 'call')
+#          wW3 <- writeWorksheet(wb, cl, 'call')
+#          saveWorkbook(wb)
+#          return(invisible(file.))
+#        } else {
+#          warning('created sheet using XLConnect but could not write to it')
+#        }
+#      } else {
+#        warning(
+#  'created workbook using XLConnect but could not create a sheet')
+#      }
+#    }
+#  }
+##
+## 7.  Will dataframes2xls work?
 ##     -> DO NOT USE
 ##     This puts quotes around all the character strings
 ##
@@ -96,7 +126,7 @@ writeFindFn2xls <- function(x,
 #         (file. %in% dir()))return(invisible(file.))
 #    }
 ##
-## 7.  Write warnings re. can't create xls file
+## 8.  Write warnings re. can't create xls file
 ##
     # dataframe2xls error msg
 #    if(WX)if(tP)print(WXo)
@@ -117,7 +147,7 @@ writeFindFn2xls <- function(x,
       sep='')
 #  }
 ##
-## 8.  Write 3 csv files
+## 9.  Write 3 csv files
 ##
   f.xls <- regexpr('\\.xls', file.)
   if(f.xls>0)file. <- substring(file., 1, f.xls-1)

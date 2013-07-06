@@ -61,7 +61,14 @@ PackageSum2.data.frame <- function(x,
                 xnew[ip, ic] <- nhr
               } else {
                 if(fields[ic] == 'vignette') {
-                  vig <- (vignette(package=x$Package[ip])$results)
+#  The following says nrow(vinfo) has zero length in vignette
+#  using R version 3.0.1 Patched (2013-06-21 r63003)
+#  using platform: i386-pc-solaris2.10 (32-bit) in a CRAN test
+#  For x$Package[ip] == 'base', dim(vignette(.)$results) = 0  4
+#                  vig <- (vignette(package=x$Package[ip])$results)
+                  xPi <- x$Package[ip]
+                  VIG <- vignette(package=x$Package[ip])
+                  vig <- VIG$results
                   if(nrow(vig)>1){
                     clps <- paste(vig[, 'Item'], collapse=', ')
                     xnew[ip, ic] <- paste(nrow(vig), clps, sep=':  ')

@@ -3,8 +3,8 @@ export("?", back2ForwardSlash, findFn, findFn2xls, grepFn,
        Ops.findFn, PackageSum2, PackageSummary, sortFindFn,
        unionFindFn, writeFindFn2xls)
 
-#importFrom(base, print)
-#importFrom(base, summary)
+#importFrom(WriteXLS, testPerl, WriteXLS)
+#importFrom(RODBC, odbcConnectExcel)
 
 S3method("[", findFn)
 S3method(PackageSum2, data.frame)
