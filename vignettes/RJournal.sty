@@ -5,7 +5,7 @@
 %% The original source files were:
 %%
 %% RJournal.dtx  (with options: `package')
-%% 
+%%
 \def\fileversion{v0.6}
 \def\filename{RJournal}
 \def\filedate{2009/05/05}
@@ -40,7 +40,7 @@
     linkcolor=link,%
     urlcolor=link
 }
-\IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
+%\IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
 \newcommand{\volume}[1]{\def\RJ@volume{#1}}
 \newcommand{\volnumber}[1]{\def\RJ@number{#1}}
 \renewcommand{\date}[1]{\def\RJ@date{#1}}
@@ -58,7 +58,7 @@
     \ifx\empty\RJ@author\else\noindent\textit{\RJ@author}
     \par\nobreak\addvspace{\baselineskip}\fi
     \@afterindentfalse\@nobreaktrue\@afterheading}
-\renewcommand{\abstract}[1]{\begin{center}\begin{minipage}{0.92\linewidth} 
+\renewcommand{\abstract}[1]{\begin{center}\begin{minipage}{0.92\linewidth}
     \textbf{Abstract } #1 \end{minipage}\end{center} \subsubsection{} \vspace{-12pt}}
 \renewcommand\chapter{\secdef\RJ@chapter\@schapter}
 \providecommand{\nohyphens}{%

@@ -3,6 +3,7 @@
 %% need no \usepackage{Sweave}
 
 \usepackage{RJournal}
+%\usepackage[noae]{Sweave}
 \usepackage[round]{natbib}
 %\bibliographystyle{abbrvnat}
 \SweaveOpts{keep.source=TRUE}

@@ -1,4 +1,4 @@
-68dfb8c80206fa45f734e8527bf416e8 *DESCRIPTION
+f31a07300a112d3d8189f22fe41e98bc *DESCRIPTION
 8da767c093148f1a5f06e87061abd627 *NAMESPACE
 671c19deee85c33046530c1bc27571b5 *NEWS
 ca9d066131debffd3bd93f459ee930ec *R/Extract.findFn.R
@@ -17,11 +17,12 @@ f1399da34bdb0c0aa495f67029b90311 *R/print.findFn.R
 d9f9fca2555d71fc4e51233fde61bdae *R/summary.findFn.R
 95a775d1e57a0895a528e5521712570f *R/unionFindFn.R
 1e456a40e6aa6c2e474747fd7cf79437 *R/writeFindFn2xls.R
+520c62a30d8794beb7de112a40650aa3 *build/vignette.rds
 3c8119e4c111dd4bab8cf9001db49c24 *inst/brew/default/results.brew.html
 7bf92a8935a56c8b82836efb60bf7fbf *inst/brew/iframe/results.brew.html
-4612e14a2643dac28f783d8c26dbaf83 *inst/doc/sos.R
-07ed97ef3be371b928a9c8271c99f838 *inst/doc/sos.Rnw
-be5f0b81b67230a62d8dbfeffd9b62a7 *inst/doc/sos.pdf
+2bc82a78a4d33ada0ae27aac5a384b54 *inst/doc/sos.R
+38b3cbc99c19dcc38631091c206031b2 *inst/doc/sos.Rnw
+0fabd82d6b45801c1b11627a011e2098 *inst/doc/sos.pdf
 9a58bafaf153b32f1a664687841c5d82 *inst/js/sorttable.js
 89bd3b18d245c54f05f280f596ea2935 *inst/tests/example_back2ForwardSlash.txt
 faae1089f24b0a8a3044e1e78f870fa6 *man/Extract.findFn.Rd
@@ -37,5 +38,5 @@ b2cbce1917eb1a363d669f3aae638a28 *man/sortFindFn.Rd
 d2a7d91369fdd329ecb3b4791139d669 *man/summary.findFn.Rd
 730d3e2a7e0a1e3d57692a162beb049b *man/unionFindFn.Rd
 433afe456f7f5871b85cd142bc006b7a *man/writeFindFn2xls.Rd
-d18598b9b112dec377dad8f83b620dd2 *vignettes/RJournal.sty
-07ed97ef3be371b928a9c8271c99f838 *vignettes/sos.Rnw
+1bdf987544755c537f9e1f8185b0e4b8 *vignettes/RJournal.sty
+38b3cbc99c19dcc38631091c206031b2 *vignettes/sos.Rnw

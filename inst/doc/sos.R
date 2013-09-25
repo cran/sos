@@ -1,7 +1,7 @@
 ### R code from vignette source 'sos.Rnw'
 
 ###################################################
-### code chunk number 1: sos.Rnw:9-11
+### code chunk number 1: sos.Rnw:10-12
 ###################################################
 options(width = 60, useFancyQuotes = FALSE)
 options(repos=c(CRAN="http://cran.cnr.berkeley.edu"))
