@@ -37,7 +37,7 @@ writeFindFn2xls <- function(x,
 ##
 ## 4.  Will WriteXLS work?
 ##
-    if(require(WriteXLS)){
+    if(requireNamespace('WriteXLS', quietly=TRUE)){
       WX <- TRUE
       if(tP <- WriteXLS::testPerl()){
         WXo <- try(WriteXLS::WriteXLS(c('sum2', 'x2.', 'cl'),
@@ -49,7 +49,7 @@ writeFindFn2xls <- function(x,
 ##
 ## 5.  How about RODBC?
 ##
-    if(require(RODBC)){
+    if(requireNamespace('RODBC', quietly=TRUE)){
       RO <- TRUE
       xlsFile <- try(RODBC::odbcConnectExcel(file., readOnly=FALSE))
       if(class(xlsFile)!='try-error'){
@@ -153,8 +153,8 @@ writeFindFn2xls <- function(x,
   if(f.xls>0)file. <- substring(file., 1, f.xls-1)
 #
   file3 <- paste(file., c('-sum.csv', '.csv', '-call.csv'), sep='')
-  write.csv(sum2, file3[1], ...)
-  write.csv(x, file3[2], ...)
-  write.csv(cl, file3[3], ...)
+  utils::write.csv(sum2, file3[1], ...)
+  utils::write.csv(x, file3[2], ...)
+  utils::write.csv(cl, file3[3], ...)
   return(invisible(file.))
 }

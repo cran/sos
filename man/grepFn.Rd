@@ -5,8 +5,8 @@
 }
 \description{
   Search for \code{pattern} in a \code{column} of a matrix or
-  data.frame using \code{grep}.  If \code{value} = TRUE (the default),
-  return the selected subset of \code{x}.
+  data.frame using \code{grep}.  If \code{value} = TRUE (the 
+  default), return the selected subset of \code{x}.
 }
 \usage{
 grepFn(pattern, x, column='Function', ignore.case=FALSE,

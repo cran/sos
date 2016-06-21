@@ -171,7 +171,7 @@ findFn <- function(string,
       } else if (verbose > 0) {
         cat(i, "")
         if((i%%10)==0) cat('\n')
-        flush.console()
+        utils::flush.console()
       }
       href.i <- sprintf("%s&whence=%d", href, 20 * (i - 1))
       ans <- rbind(ans, parseHTML(href.i))

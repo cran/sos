@@ -5,6 +5,10 @@ export("?", back2ForwardSlash, findFn, findFn2xls, grepFn,
 
 #importFrom(WriteXLS, testPerl, WriteXLS)
 #importFrom(RODBC, odbcConnectExcel)
+importFrom("utils", "browseURL", "flush.console", "help",
+     "install.packages", "packageDescription", "vignette",
+     "write.csv")
+importFrom('brew', 'brew')
 
 S3method("[", findFn)
 S3method(PackageSum2, data.frame)
@@ -13,3 +17,4 @@ S3method(PackageSum2, list)
 S3method(print, findFn)
 S3method(print, summary.findFn)
 S3method(summary, findFn)
+S3method(Ops, findFn)

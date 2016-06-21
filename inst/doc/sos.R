@@ -1,7 +1,7 @@
 ### R code from vignette source 'sos.Rnw'
 
 ###################################################
-### code chunk number 1: sos.Rnw:10-12
+### code chunk number 1: sos.Rnw:17-19
 ###################################################
 options(width = 60, useFancyQuotes = FALSE)
 options(repos=c(CRAN="http://cran.cnr.berkeley.edu"))
@@ -16,7 +16,9 @@ help.search('Petal.Length')
 ###################################################
 ### code chunk number 3: PL.RSiteSearch
 ###################################################
-RSiteSearch('Petal.Length')
+if(!fda::CRAN()){
+  RSiteSearch('Petal.Length')
+}
 
 
 ###################################################
@@ -73,7 +75,9 @@ print(PL[PL$Package == 'datasets', 'Function'], max.levels = 0)
 ###################################################
 ### code chunk number 10: RSiteSearch-spline
 ###################################################
-RSiteSearch('spline')
+if(!fda::CRAN()){
+  RSiteSearch('spline')
+}
 
 
 ###################################################
@@ -97,7 +101,9 @@ splineHits <- getRSiteSearchHits("http://search.r-project.org/cgi-bin/namazu.cgi
 ###################################################
 ### code chunk number 12: RSiteSearch-spline-fun
 ###################################################
-RSiteSearch('spline', 'fun')
+if(!fda::CRAN()){
+  RSiteSearch('spline', 'fun')
+}
 
 
 ###################################################
@@ -128,11 +134,13 @@ splineAll[selSpl, ]
 ###################################################
 ### code chunk number 17: sos-spline-grep
 ###################################################
-grepFn('spline', splineAll, ignore.case = TRUE)
+if(!fda::CRAN()){
+  grepFn('spline', splineAll, ignore.case = TRUE)
+}
 
 
 ###################################################
-### code chunk number 18: sos-spline-grep
+### code chunk number 18: sos-spline-grep2
 ###################################################
 g <- grepFn('spline', splineAll, ignore.case = TRUE)
 gFunc6 <- as.character(g[6, "Function"])
@@ -154,7 +162,7 @@ writeFindFn2xls(splineAll)
 
 
 ###################################################
-### code chunk number 21: writeFindFn2xls-options
+### code chunk number 21: writeFindFn2xls-options2
 ###################################################
 options(op)
 

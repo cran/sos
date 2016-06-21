@@ -24,6 +24,6 @@ installPackages <- function(x,
 ## 3.  get not installed
 ##
   if (length(notInst) > 0)
-    install.packages(notInst)
+    utils::install.packages(notInst)
 }
 

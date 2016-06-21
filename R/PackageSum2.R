@@ -37,8 +37,8 @@ PackageSum2.data.frame <- function(x,
 ##
   for(ip in seq(1, length=nx)){
     if(xP[ip] %in% instPkgs){
-      pkgDesci <- packageDescription(x$Package[ip], lib.loc=lib.loc)
-      pkgHelp <- try(help(package=x$Package[ip], lib.loc=lib.loc,
+      pkgDesci <- utils::packageDescription(x$Package[ip], lib.loc=lib.loc)
+      pkgHelp <- try(utils::help(package=x$Package[ip], lib.loc=lib.loc,
                           help_type='text'))
       if(class(pkgHelp) != 'try-error'){
         for(ic in seq(1, length=nf)){
@@ -67,7 +67,7 @@ PackageSum2.data.frame <- function(x,
 #  For x$Package[ip] == 'base', dim(vignette(.)$results) = 0  4
 #                  vig <- (vignette(package=x$Package[ip])$results)
                   xPi <- x$Package[ip]
-                  VIG <- vignette(package=x$Package[ip])
+                  VIG <- utils::vignette(package=x$Package[ip])
                   vig <- VIG$results
                   if(nrow(vig)>1){
                     clps <- paste(vig[, 'Item'], collapse=', ')

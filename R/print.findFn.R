@@ -98,7 +98,7 @@ print.findFn <- function(x,
   assign("ocall", ocall, envir = xenv)
   assign("x", x, envir = xenv)
   ##
-  brew(template, File, envir = xenv)
+  brew::brew(template, File, envir = xenv)
   if (!hasTemplate) {
     close(template)
   }
@@ -217,7 +217,7 @@ print.findFn <- function(x,
       if (FileInf2$size <= 0) {
         warning("0 bytes in file ", File, ";  nothing to give to a browser.")
       } else {
-        browseURL(File)
+        utils::browseURL(File)
       }
     }
   }

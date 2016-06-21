@@ -1,3 +1,10 @@
+%NOTE:  DO NOT "Compile PDF" on this file in RStudio
+%BECAUSE IT INSERTS 
+%\SweaveOpts{concordance=TRUE}
+%BELOW RIGHT AFTER 
+%\begin{document}
+%AND THAT CAUSES "R CMD build sos" to fail with 
+%Error in texi2dvi
 \documentclass[a4paper]{report}
 
 %% need no \usepackage{Sweave}
@@ -12,6 +19,7 @@ options(width = 60, useFancyQuotes = FALSE)
 options(repos=c(CRAN="http://cran.cnr.berkeley.edu"))
 @
 \begin{document}
+%\SweaveOpts{concordance=TRUE}
 %\VignetteIndexEntry{sos R Journal article}
 %\VignetteDepends{sos}
 %\VignetteKeywords{help, search}
@@ -100,7 +108,9 @@ help.search('Petal.Length')
 @
 When this failed, many users might then try
 <<PL.RSiteSearch>>=
-RSiteSearch('Petal.Length')
+if(!fda::CRAN()){
+  RSiteSearch('Petal.Length')
+}
 @
 This produced 80 matches
 when it was tried one day (and 62 matches a few months later).
@@ -183,7 +193,9 @@ Almost four years ago, the lead author of this article decided he
 needed to learn more about splines.  A literature search
 began as follows:
 <<RSiteSearch-spline,results=hide>>=
-RSiteSearch('spline')
+if(!fda::CRAN()){
+  RSiteSearch('spline')
+}
 @
 <<RSiteSearch-spline-numpages,results=hide,echo=FALSE>>=
 getRSiteSearchHits <- function(description) {
@@ -205,7 +217,9 @@ While preparing this manuscript, this command identified
 \Sexpr{splineHits$hits} documents as of \Sexpr{splineHits$date}.  That is too many.  It can be
 restricted to functions as follows:
 <<RSiteSearch-spline-fun,results=hide>>=
-RSiteSearch('spline', 'fun')
+if(!fda::CRAN()){
+  RSiteSearch('spline', 'fun')
+}
 @
 <<RSiteSearch-spline-fun-numpages,results=hide,echo=FALSE>>=
 splineFunHits <- getRSiteSearchHits("http://search.r-project.org/cgi-bin/namazu.cgi?query=spline&max=20&result=normal&sort=score&idxname=functions")
@@ -240,9 +254,11 @@ has that name.
 To look for help pages whose name includes the characters
 \samp{spline}, we can use {\tt grepFn}:
 <<sos-spline-grep,results=hide>>=
-grepFn('spline', splineAll, ignore.case = TRUE)
+if(!fda::CRAN()){
+  grepFn('spline', splineAll, ignore.case = TRUE)
+}
 @
-<<sos-spline-grep,results=hide,echo=FALSE>>=
+<<sos-spline-grep2,results=hide,echo=FALSE>>=
 g <- grepFn('spline', splineAll, ignore.case = TRUE)
 gFunc6 <- as.character(g[6, "Function"])
 gPac6 <- as.character(g[6, "Package"])
@@ -282,7 +298,7 @@ op <- options(width = 80)
 <<writeFindFn2xls,results=hide>>=
 writeFindFn2xls(splineAll)
 @
-<<writeFindFn2xls-options,echo=FALSE>>=
+<<writeFindFn2xls-options2,echo=FALSE>>=
 options(op)
 @
 ({\tt findFn2xls} is an alias for {\tt writeFindFn2xls}.
@@ -464,7 +480,6 @@ and view packages.  (The coverage of Crantastic includes current and
 orphaned CRAN packages, while \cite{JB09URL}
 also includes 'most of the default packages from Bioconductor and all
 of Jim Lindsey's packages.')
-
 
 \section{Acknowledgments}
 The capabilities described here extend the power of the

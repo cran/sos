@@ -87,16 +87,20 @@ all.equal(de2, de2.)
 
 # summary and print still work with the combined object.
 summary(de.s)
-de.s
+if(!fda::CRAN()){
+  de.s
+}
 
 summary(de2)
-de2
+if(!fda::CRAN()){
+  de2
+}
 
 \dontshow{
 # The following gave an error;  now fixed 2009.05.12
 x <- findFn("spline", maxPages = 1, quiet = TRUE)
 y <- findFn("winbugs", maxPages = 1, quiet = TRUE)
-intersectFindFn( x, y )
+xy <- intersectFindFn( x, y )
 }
 
 }
