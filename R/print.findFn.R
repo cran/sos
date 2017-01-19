@@ -1,38 +1,45 @@
 print.findFn <- function(x,
-                         where,
-                         title,
-                         openBrowser = TRUE,
-                         template,  ...) {
-  ##
-  ## 0.  If x has 0 rows, don't go further ...
-  ##
+    where, title,
+    openBrowser = TRUE,
+    template,  ...) {
+##
+## 0.  If x has 0 rows, don't go
+##    further ...
+##
+  cl <- deparse(substitute(x)) 
+#  print(cl)
   if (nrow(x) < 1) {
-    cat("x has zero rows;  nothing to display.\n")
+    cat("x has zero rows;  ", 
+        "nothing to display.\n")
     if (missing(where))
       where <- ""
     return(invisible(where))
   }
-  ##
-  ## 1.  where?
-  ##
+##
+## 1.  where?
+##
   if (missing(where))
     where <- "HTML"
   ##
-  if (length(where) == 1 && where == "console")
-    where <-  c("Count", "Package", "Function", "Score", "Date")
+  if (length(where) == 1 && 
+      where == "console")
+    where <-  c("Count", "Package",
+        "Function", "Score", "Date")
   ##
   if (all(where %in% names(x))) {
     print.data.frame(x[, where])
     return(invisible(""))
   }
   if (length(where)>1)
-    stop("if length(where)>1, where must names columns of x; ",
-         " they do not.  where = ",
+    stop("if length(where)>1, ", 
+      "where must names columns of", 
+      " x;  they do not.  where = ",
          paste(where, collapse=", "))
   if (toupper(where) == "HTML") {
     f0 <- tempfile()
     for(i in 1:111) {
-      File <- paste(f0, ".html", sep = "")
+      File <- paste(f0, ".html", 
+                    sep = "")
       fInf <- file.info(File)
       if(all(is.na(fInf)))
         break
@@ -42,14 +49,24 @@ print.findFn <- function(x,
   } else {
     File <- where
   }
-  ##
-  ## 2.  Get call including search string
-  ##
-  ocall <- attr(x, "call")
+##
+## 2.  Get call including search
+##     string
+##
+#  cl <- match.call()
+  Ocall <- attr(x, "call")
+  Oc0 <- deparse(Ocall)
+  Oc. <- gsub('\"', "'", Oc0)
+  Oc1 <- paste(cl, "<-", Oc.)
+#  Oc2 <- paste0('For a package summary:  ', 
+  Oc2 <- paste0('installPackages(', cl, 
+    ');  writeFindFn2xls(', cl, ')')
+#  ocall <- paste(cl, "<-", Oc1)
+#  ocall <- parse(text=Ocx)
   string <- attr(x, "string")
-  ##
-  ## 3.  title, Dir?
-  ##
+##
+## 3.  title, Dir?
+##
   if (missing(title)) {
     title <- string
   }
@@ -60,12 +77,12 @@ print.findFn <- function(x,
   } else {
     dc0 <- dir.create(Dir, FALSE, TRUE)
   }
-  ##
-  ## 4.  sorttable.js?
-  ##
-  ##  Dir <- tools:::file_path_as_absolute( dirname(File) )
-  ##  This line is NOT ENOUGH:
-  ##           browseURL(File) needs the full path in File
+##
+## 4.  sorttable.js?
+##
+##  Dir <- tools:::file_path_as_absolute( dirname(File) )
+##  This line is NOT ENOUGH:
+##     browseURL(File) needs the full path in File
   js <- system.file("js", "sorttable.js", package = "sos")
   if (!file.exists(js)) {
     warning("Unable to locate 'sorttable.js' file")
@@ -75,26 +92,34 @@ print.findFn <- function(x,
     ## that does not exist, then delete it on.exit
     file.copy(js, Dir)
   }
-  ##
-  ## 5.  Modify x$Description
-  ##
-  ## save "x" as "xin" for debugging
+##
+## 5.  Modify x$Description
+##
+## save "x" as "xin" for debugging
   xin <- x
-  x$Description <- gsub("(^[ ]+)|([ ]+$)", "",
-                        as.character(x$Description), useBytes = TRUE)
+  x$Description <- gsub("(^[ ]+)|([ ]+$)", 
+      "", as.character(x$Description),
+      useBytes = TRUE)
   x[] <- lapply(x, as.character)
-  ##
-  ## 6.  template for brew?
-  ##
+##
+## 6.  template for brew?
+##
   hasTemplate <- !missing(template)
   if (!hasTemplate) {
-    templateFile <- system.file("brew", "default", "results.brew.html",
-                                package = "sos")
-    template <- file(templateFile, encoding = "utf-8", open = "r" )
+    templateFile <- system.file("brew",
+        "default", "results.brew.html",
+        package = "sos")
+    template <- file(templateFile, 
+        encoding = "utf-8", open = "r" )
   }
-  ## "brew( template,  File )" malfunctioned;
-  ## try putting what we need in a special environment
+## "brew( template,  File )" malfunctioned;
+## try putting what we need in a special environment
   xenv <- new.env()
+# str(ocall)
+#language findFn(string = "spline", maxPages = 1)
+  assign("Oc1", Oc1, envir = xenv)
+  assign("Oc2", Oc2, envir = xenv)
+  ocall <- paste0(Oc1, '; ', Oc2)
   assign("ocall", ocall, envir = xenv)
   assign("x", x, envir = xenv)
   ##
@@ -102,9 +127,9 @@ print.findFn <- function(x,
   if (!hasTemplate) {
     close(template)
   }
-  ##
-  ## 7.  Was File created appropriately?  If no, try Sundar's original code
-  ##
+##
+## 7.  Was File created appropriately?  If no, try Sundar's original code
+##
   FileInfo <- file.info(File)
   if (is.na(FileInfo$size) || FileInfo$size <= 0) {
     if (is.na(FileInfo$size)) {
@@ -113,7 +138,7 @@ print.findFn <- function(x,
       warning("Brew created a file of size 0")
     }
     cat("Ignoring template.\n")
-    ## Sundar's original construction:
+## Sundar's original construction:
     con <- file(File, "wt")
     on.exit(close(con))
     .cat <- function(...)
@@ -181,8 +206,10 @@ print.findFn <- function(x,
          "</head>")
     ##  Search results ... ???
     .cat("<h1>findFn Results</h1>")
+# str(ocall)
+#language findFn(string = "spline", maxPages = 1)    
     .cat("<h2>call: <font color='#800'>",
-         paste(deparse(ocall), collapse = ""), "</font></h2>\n")
+         paste(ocall, collapse = ""), "</font></h2>\n")
     .cat("<table class='sortable'>\n<thead>")
     link <- as.character(x$Link)
     desc <- gsub("(^[ ]+)|([ ]+$)", "", as.character(x$Description), useBytes = TRUE)

@@ -155,7 +155,7 @@ findFn(string, maxPages = 20, sortby = NULL, verbose = 1, ...)
   \code{findFn} searches only "Target:  Functions" from that 
     site, ignoring the R-help arcihves.
 
-  \url{http://www.r-project.org/search.html} for a list of 
+  \url{https://www.r-project.org/search.html} for a list of 
     alternative R search capabilities, each of which may be 
     best for different types of inquiries.
 

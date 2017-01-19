@@ -2,24 +2,26 @@ findFn <- function(string,
                    maxPages = 20,
                    sortby = NULL,
                    verbose = 1, ...) {
-  ####################################################################
-  ##
-  ## RSiteSearch(string, "fun")
-  ##
-  ## returning a data.frame with one row for each hit
-  ## giving package and "function" / entry name,
-  ## sorted with the most frequently selected package first
-  ##
-  ## with the following attributes
-  ## matches = total number of hits found by the search
-  ## summary = sort(table(ans$Package));
-  ##      summary contains results for only the first maxPages,
-  ##      so sum(summary) may be less than hits.
-  ##
-  ##
-  ##
-  ## 1.  Define internal function
-  ## internal functions
+  ###########################################
+## RSiteSearch(string, "fun")
+##
+## returning a data.frame with one row for
+## each match giving package and "function" /
+## entry name, sorted with the most 
+## frequently selected package first
+##
+## with the following attributes
+## matches = total number of hits found by
+## the search
+## summary = sort(table(ans$Package));
+##   summary contains results for only the 
+##   first maxPages, so sum(summary) may be
+##   less than hits.
+##
+##
+##
+## 1.  Define internal function
+## internal functions
   parseLinks <- function(links) {
     lnk <- sub("<dt>.*<strong><a href=\\\"(.*\\.html)\\\">.*$", "\\1",
                links, useBytes = TRUE)
