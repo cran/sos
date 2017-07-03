@@ -19,11 +19,21 @@ PackageSummary <- function(x, sortby=NULL){
                     MaxScore=as.numeric(maxSc),
                     TotalScore=as.numeric(totSc), Date=x$Date[iP],
                     stringsAsFactors=FALSE)
+  L. <- x$Link
+  if(is.null(L.)||(length(L.)<1)){
+    L1 <- character(length(iP))
+  } else {
+    L0 <- strsplit(L.[iP], '/')
+    L1 <- sapply(L0, function(x){
+      paste(c(utils::head(x, -1), '00Index.html'), collapse='/')
+    })
+  }
+  pkgSum$pkgLink <- L1
 ##
 ## 4.  Sort
 ##
   s0 <-  c('Count', 'MaxScore', 'TotalScore', 'Package',
-           'Score', 'Function', 'Date', 'Description', 'Link')
+           'Score', 'Function', 'Date', 'Description', 'pkgLink')
   s0. <- tolower(s0)
   {
     if(is.null(sortby)) sortby <-  s0

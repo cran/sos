@@ -21,16 +21,17 @@ findFn <- function(string,
 ##
 ##
 ## 1.  Define internal function
-## internal functions
+## 
   parseLinks <- function(links) {
-    lnk <- sub("<dt>.*<strong><a href=\\\"(.*\\.html)\\\">.*$", "\\1",
-               links, useBytes = TRUE)
-    desc0 <- sub("<dt>.*<strong><a href=\\\".*\\\">R.*:(.*)</a>.*$", "\\1",
-                 links, useBytes = TRUE)
-    desc <- gsub("(<strong class=\"keyword\">)|(</strong>)|^[ ]+|[ ]+$", "",
-                 desc0, useBytes = TRUE)
+    lnk <- sub("<dt>.*<strong><a href=\\\"(.*\\.html)\\\">.*$", 
+               "\\1", links, useBytes = TRUE)
+    desc0 <- sub("<dt>.*<strong><a href=\\\".*\\\">R.*:(.*)</a>.*$", 
+                 "\\1", links, useBytes = TRUE)
+    desc <- gsub("(<strong class=\"keyword\">)|(</strong>)|^[ ]+|[ ]+$", 
+                 "", desc0, useBytes = TRUE)
     list(link = lnk, description = desc)
   }
+#  
   parseHTML <- function(href) {
     link <- try(url(href))
     on.exit(close(link))
@@ -107,15 +108,15 @@ findFn <- function(string,
     oops <- (substring(pac, 1, 1)=='<')
     ans <- Ans[!oops,]
     attr(ans, "matches") <- Hits
-    ans
+    ans # end parseHTML
   }
   ##
   ## end internal functions
   ##
   quiet <- (verbose < 2)
-  ##
-  ## 2.  Set up query
-  ##
+##
+## 2.  Set up query
+##
   if (substr(string, 1, 1) != "{") {
     string <- gsub(" ", "+", string)
   } else {
@@ -126,9 +127,9 @@ findFn <- function(string,
           "query=%s&max=20&result=normal&sort=score&idxname=functions",
                sep = "")
   href <- sprintf(fmt, string)
-  ##
-  ## 3.  Query
-  ##
+##
+## 3.  Query
+##
   ##  3.1.  Set up
   ans <- parseHTML(href)
   hits. <- attr(ans, "matches")

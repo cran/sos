@@ -1,6 +1,7 @@
 export("?", back2ForwardSlash, findFn, findFn2xls, grepFn,
        hits, installPackages, intersectFindFn, matches,
-       Ops.findFn, PackageSum2, PackageSummary, sortFindFn,
+       Ops.findFn, packageSum,
+       PackageSum2, PackageSummary, sortFindFn,
        unionFindFn, writeFindFn2xls)
 
 #importFrom(WriteXLS, testPerl, WriteXLS)
@@ -11,10 +12,20 @@ importFrom("utils", "browseURL", "flush.console", "help",
 importFrom('brew', 'brew')
 
 S3method("[", findFn)
+
+S3method(installPackages, packageSum)
+S3method(installPackages, findFn)
+#S3method(installPackages, character)
+
+S3method(packageSum, data.frame)
+S3method(packageSum, findFn)
+S3method(packageSum, list)
+
 S3method(PackageSum2, data.frame)
 S3method(PackageSum2, findFn)
 S3method(PackageSum2, list)
+
 S3method(print, findFn)
-S3method(print, summary.findFn)
+S3method(print, packageSum)
 S3method(summary, findFn)
 S3method(Ops, findFn)

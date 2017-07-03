@@ -47,9 +47,8 @@ summary(PL)
 ###################################################
 s <- summary(PL)
 blank <- data.frame(Package = "<...>",
-                    Count = "", MaxScore = "",
-                    TotalScore = "",
-                    Date = "")
+      Count = "", MaxScore = "", TotalScore = "",
+      Date = "", pkgLink='')
 s$PackageSummary[] <- lapply(s$PackageSummary[], as.character)
 row.names(s$PackageSummary) <-
   as.character(s$PackageSummary$Package)

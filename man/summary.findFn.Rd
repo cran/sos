@@ -47,9 +47,9 @@
   \item{PackageSummary}{
     a data.frame with one row for each package and columns
     \code{Package}, \code{Count}, \code{MaxScore}, 
-    \code{TotalScore}, and \code{Date}. This summary is 
-    sorted per the \code{sortby} argument in the call to 
-    \code{findFn}.
+    \code{TotalScore}, \code{Date}, and \code{pgLink}. This 
+    summary is sorted per the \code{sortby} argument in the 
+    call to \code{findFn}.
   }
   \item{minPackages, minCount}{
     the \code{minPackages} and \code{minCount} arguments 
@@ -63,7 +63,7 @@
     is smaller.
   }
   \item{nrow}{
-    the number if matches in this \code{findFn} object
+    the number of matches in this \code{findFn} object
   }
   \item{nPackages}{
     the number of packages in this \code{findFn} object

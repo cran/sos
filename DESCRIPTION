@@ -1,6 +1,6 @@
 Package: sos
 Title: Search Contributed R Packages, Sort by Package
-Version: 1.4-1
+Version: 2.0-0
 Author: Spencer Graves, Sundar Dorai-Raj, and Romain Francois
 Maintainer: Spencer Graves <spencer.graves@prodsyse.com>
 Description: Search contributed R packages, sort by package.
@@ -9,8 +9,8 @@ Depends: brew
 Suggests: RODBC, WriteXLS, fda
 Repository: CRAN
 Repository/R-Forge/Project: rsitesearch
-Repository/R-Forge/Revision: 250
-Repository/R-Forge/DateTimeStamp: 2017-01-19 06:09:02
-Date/Publication: 2017-01-19 15:19:28
+Repository/R-Forge/Revision: 265
+Repository/R-Forge/DateTimeStamp: 2017-07-03 07:45:41
+Date/Publication: 2017-07-03 13:38:22 UTC
 NeedsCompilation: no
-Packaged: 2017-01-19 06:27:32 UTC; rforge
+Packaged: 2017-07-03 08:08:10 UTC; rforge

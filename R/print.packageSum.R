@@ -1,4 +1,4 @@
-print.findFn <- function(x,
+print.packageSum <- function(x,
     where, title,
     openBrowser = TRUE,
     template,  ...) {
@@ -7,6 +7,7 @@ print.findFn <- function(x,
 ##    further ...
 ##
   cl <- deparse(substitute(x)) 
+  if(length(grep('\\(', cl))>0)cl <- 'x'
 #  print(cl)
   if (nrow(x) < 1) {
     cat("x has zero rows;  ", 
@@ -23,8 +24,9 @@ print.findFn <- function(x,
   ##
   if (length(where) == 1 && 
       where == "console")
-    where <-  c("Count", "Package",
-        "Function", "Score", "Date")
+    where <-  c("Package", "Count", 'MaxScore', 
+        'TotalScore', 'Date', "Title", 'Version',
+        'Author')
   ##
   if (all(where %in% names(x))) {
     print.data.frame(x[, where])
@@ -38,8 +40,7 @@ print.findFn <- function(x,
   if (toupper(where) == "HTML") {
     f0 <- tempfile()
     for(i in 1:111) {
-      File <- paste(f0, ".html", 
-                    sep = "")
+      File <- paste0(f0, ".html")
       fInf <- file.info(File)
       if(all(is.na(fInf)))
         break
@@ -50,14 +51,27 @@ print.findFn <- function(x,
     File <- where
   }
 ##
-## 2.  title, Dir?
+## 2.  Get call including search
+##     string
 ##
+#  cl <- match.call()
+  Ocall <- attr(x, "call")
+  Oc0 <- deparse(Ocall)
+  Oc. <- gsub('\"', "'", Oc0)
+  Oc1 <- paste(cl, "<-", paste(Oc., collapse=''))
+#  Oc2 <- paste0('For a package summary:  ', 
+#  Oc2 <- paste0('installPackages(', cl, 
+#    ');  writeFindFn2xls(', cl, ')')
+  iPx <- paste0('installPackages(', cl, ',...)')
+  w2xls <- paste0('writeFindFn2xls(', cl, ')')
+#  ocall <- paste(cl, "<-", Oc1)
+#  ocall <- parse(text=Ocx)
   string <- attr(x, "string")
+##
+## 3.  title, Dir?
+##
   if (missing(title)) {
-    title <- paste('Help pages for', string)
-    titSum <- paste('package summary for', string)
-  } else {
-    titSum <- paste('packageSum(', string, ')')
+    title <- paste('packageSum for', string)
   }
   Dir <- dirname(File)
   if (Dir == ".") {
@@ -67,34 +81,13 @@ print.findFn <- function(x,
     dc0 <- dir.create(Dir, FALSE, TRUE)
   }
 ##
-## 3.  print(packageSum(...))
-##   ... moved to the end 
-#  if((toupper(where)=='HTML') && openBrowser){
-#    sumLink <- print(packageSum(x, title=title, ...))
-#  } else sumLink <- ''
-##
-## 4.  Get call including search
-##     string
-##
-#  cl <- match.call()
-  Ocall <- attr(x, "call")
-  Oc0 <- deparse(Ocall)
-  Oc. <- gsub('\"', "'", Oc0)
-  if(Oc.=='NULL')Oc. <- '...'
-  Oc1 <- paste(cl, "<-", paste(Oc., collapse=''))
-#  Oc2 <- paste0('For a package summary:  ', 
-#  Oc2 <- paste0('For more info, call installPackages', 
-#          ' before packageSum')
-  pkgS <- paste0('packageSum(', cl, ',...)')
-#  ocall <- paste(cl, "<-", Oc1)
-#  ocall <- parse(text=Ocx)
-##
-## 5.  sorttable.js?
+## 4.  sorttable.js?
 ##
 ##  Dir <- tools:::file_path_as_absolute( dirname(File) )
 ##  This line is NOT ENOUGH:
 ##     browseURL(File) needs the full path in File
-  js <- system.file("js", "sorttable.js", package = "sos")
+  js <- system.file("js", "sorttable.js", 
+                    package = "sos")
   if (!file.exists(js)) {
     warning("Unable to locate 'sorttable.js' file")
   } else {
@@ -104,24 +97,24 @@ print.findFn <- function(x,
     file.copy(js, Dir)
   }
 ##
-## 6.  Modify x$Description
+## 5.  Modify x$Title
 ##
 ## save "x" as "xin" for debugging
   xin <- x
-# Allow x to have a NULL Description 
+# Allow x to have a NULL Title 
 # to simplify testing of other sos functions   
-  Desc <- x$Description 
+  Desc <- x$Title 
   if(is.null(Desc))Desc <- ''
-  x$Description <- gsub("(^[ ]+)|([ ]+$)", 
+  x$Title <- gsub("(^[ ]+)|([ ]+$)", 
       "", as.character(Desc), useBytes = TRUE)
   x[] <- lapply(x, as.character)
 ##
-## 7.  template for brew?
+## 6.  template for brew?
 ##
   hasTemplate <- !missing(template)
   if (!hasTemplate) {
     templateFile <- system.file("brew",
-        "default", "results.brew.html",
+        "default", "pkgSum.brew.html",
         package = "sos")
     template <- file(templateFile, 
         encoding = "utf-8", open = "r" )
@@ -132,20 +125,21 @@ print.findFn <- function(x,
 # str(ocall)
 #language findFn(string = "spline", maxPages = 1)
   assign("Oc1", Oc1, envir = xenv)
-#  assign("Oc2", Oc2, envir = xenv)
-  assign('pkgS', pkgS, envir=xenv)
-#  assign('sumLink', sumLink, envir=xenv)
+#  assign("Oc2", cl, envir = xenv)
 #  ocall <- paste0(Oc1, '; ', Oc2)
+#  ocall <- Oc1
 #  assign("ocall", ocall, envir = xenv)
+  assign('iPx', iPx, envir=xenv)
+  assign('w2xls', w2xls, envir=xenv)
   assign("x", x, envir = xenv)
-  ##
+##
   brew::brew(template, File, envir = xenv)
   if (!hasTemplate) {
     close(template)
   }
 ##
-## 8.  Was File created appropriately?  
-##       If no, try Sundar's original code
+## 7.  Was File created appropriately?  
+##     If no, try Sundar's original code
 ##
   FileInfo <- file.info(File)
   if (is.na(FileInfo$size) || FileInfo$size <= 0) {
@@ -159,7 +153,8 @@ print.findFn <- function(x,
     con <- file(File, "wt")
     on.exit(close(con))
     .cat <- function(...)
-      cat(..., "\n", sep = "", file = con, append = TRUE)
+      cat(..., "\n", sep = "", file = con, 
+          append = TRUE)
     ## start
     cat("<html>", file = con)
     .cat("<head>")
@@ -222,35 +217,46 @@ print.findFn <- function(x,
          "</style>\n",
          "</head>")
     ##  Search results ... ???
-    .cat("<h1>findFn Results</h1>")
+    .cat("<h1>", title, "</h1>")
 # str(ocall)
 #language findFn(string = "spline", maxPages = 1)    
     .cat("<h2>call: <font color='#800'>",
-         paste(Ocall, collapse = ""), "</font></h2>\n")
+         paste(Oc1, collapse = ""), "</font></h2>\n")
+    .cat("<h2>Title, etc., are available on ", 
+         "installed packages. To get more, use", 
+         " <font color='#800'> ", iPx, 
+         " </font></h2>")
+    .cat("<h2>See also: <font color='#800'>", 
+         w2xls, "</font></h2>")
     .cat("<table class='sortable'>\n<thead>")
-    link <- as.character(x$Link)
-    desc <- gsub("(^[ ]+)|([ ]+$)", "", as.character(x$Description), useBytes = TRUE)
-    x$Link <- sprintf("<a href='%s' target='_blank'>%s</a>", link, desc)
-    x$Description <- NULL
-    ## change "Link" to "Description and Link"
-    ilk <- which(names(x) == "Link")
-    names(x)[ilk] <- "Description and Link"
+    link <- as.character(x$pkgLink)
+    desc <- gsub("(^[ ]+)|([ ]+$)", "", 
+        as.character(x$Title), useBytes = TRUE)
+    x$pkgLink <- sprintf("<a href='%s' target='_blank'>%s</a>", 
+                      link, desc)
+    x$Title <- NULL
+    ## change "Link" to "Title and Link"
+    ilk <- which(names(x) == "pkgLink")
+    names(x)[ilk] <- "Title and Link"
     ##
     .cat("<tr>\n  <th style='width:40px'>Id</th>")
     .cat(sprintf("  <th>%s</th>\n</tr>",
-                 paste(names(x), collapse = "</th>\n  <th>")))
+        paste(names(x), collapse = "</th>\n  <th>")))
     .cat("</thead>\n<tbody>")
     paste.list <- c(list(row.names(x)),
-                    lapply(x, as.character), sep = "</td>\n  <td>")
+        lapply(x, as.character), 
+            sep = "</td>\n  <td>")
     tbody.list <- do.call("paste", paste.list)
-    tbody <- sprintf("<tr>\n  <td>%s</td>\n</tr>", tbody.list)
-    tbody <- sub("<td><a", "<td class=link><a", tbody, useBytes = TRUE)
+    tbody <- sprintf("<tr>\n  <td>%s</td>\n</tr>",
+                     tbody.list)
+    tbody <- sub("<td><a", "<td class=link><a", 
+                 tbody, useBytes = TRUE)
     .cat(tbody)
     ## another (shorter) multiline thingy ???
     .cat("</tbody></table></body></html>")
   }
   ##
-  ## 9.  Display in a browser?
+  ## 8.  Display in a browser?
   ##
   if (openBrowser) {
     FileInf2 <- file.info(File)
@@ -261,11 +267,7 @@ print.findFn <- function(x,
       if (FileInf2$size <= 0) {
         warning("0 bytes in file ", File, ";  nothing to give to a browser.")
       } else {
-#       display HTML "File";  browseURL accesses 
-#          variable(s) in this calling function 
-#          like 'title'   
         utils::browseURL(File)
-        print(packageSum(x, title=titSum, ...))
       }
     }
   }

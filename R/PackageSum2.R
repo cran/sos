@@ -1,31 +1,37 @@
 PackageSum2 <- function(x,
-      fields=c("Title", "Version", "Author", "Maintainer", "Packaged",
-          'helpPages', 'vignette'), lib.loc=NULL, ...){
+      fields=c("Title", "Version", "Author", "Maintainer",
+        "Packaged", 'helpPages', 'vignette', 'URL'), 
+          lib.loc=NULL, ...){
   UseMethod('PackageSum2')
 }
 
 PackageSum2.findFn <- function(x,
-      fields=c("Title", "Version", "Author", "Maintainer", "Packaged",
-          'helpPages', 'vignette'), lib.loc=NULL, ...){
+      fields=c("Title", "Version", "Author", "Maintainer",
+        "Packaged", 'helpPages', 'vignette', 'URL'), 
+          lib.loc=NULL, ...){
   PackageSum2(attr(x, 'PackageSummary'), fields, lib.loc, ...)
 }
 
 PackageSum2.list <- function(x,
-      fields=c("Title", "Version", "Author", "Maintainer", "Packaged",
-          'helpPages', 'vignette'), lib.loc=NULL, ...){
+      fields=c("Title", "Version", "Author", "Maintainer",
+        "Packaged", 'helpPages', 'vignette', 'URL'), 
+          lib.loc=NULL, ...){
   PackageSum2(x$PackageSummary, fields, lib.loc, ...)
 }
 
 PackageSum2.data.frame <- function(x,
-      fields=c("Title", "Version", "Author", "Maintainer", "Packaged",
-          'helpPages', 'vignette'), lib.loc=NULL, ...){
+      fields=c("Title", "Version", "Author", "Maintainer",
+        "Packaged", 'helpPages', 'vignette', 'URL'), 
+          lib.loc=NULL, ...){
 ##
 ## 1.  Create character matrix for fields
 ##
+#  cat('PackageSum2.data.frame\n')
   nf <- length(fields)
   nx <- nrow(x)
 #  xout <- x
-#  for(ic in seq(1, length=nf))xout[[fields[ic]]] <- rep('', nx)
+#  for(ic in seq(1, length=nf))
+#       xout[[fields[ic]]] <- rep('', nx)
   xP <- as.character(x$Package)
   xnew <- matrix('', nx, nf, dimnames=list(xP, fields))
 ##
@@ -35,18 +41,27 @@ PackageSum2.data.frame <- function(x,
 ##
 ## 3.  Get packageDescription for each package
 ##
+# Make sure getOption('width') is at least 80 
+# so the call to utils::help doesn't error  
+# when calling formatDL from within library
+# 2017-03-09 per William Dunlap
+  w0 <-options(width=80)
+  on.exit(options(w0))
+# reset after the   
   for(ip in seq(1, length=nx)){
     if(xP[ip] %in% instPkgs){
-      pkgDesci <- utils::packageDescription(x$Package[ip], lib.loc=lib.loc)
-      pkgHelp <- try(utils::help(package=x$Package[ip], lib.loc=lib.loc,
-                          help_type='text'))
+      pkgDesci <- utils::packageDescription(x$Package[ip], 
+                                      lib.loc=lib.loc)
+      pkgHelp <- try(utils::help(package=x$Package[ip], 
+                      lib.loc=lib.loc, help_type='text'))
       if(class(pkgHelp) != 'try-error'){
         for(ic in seq(1, length=nf)){
           if(fields[ic] == "Packaged"){
             if(is.null(pkgDesci$Packaged)){
               pkgd <- (strsplit(pkgDesci$Built, ';')[[1]][3])
             } else
-              pkgd <- (strsplit(pkgDesci$Packaged, ';')[[1]][1])
+              pkgd <- (strsplit(pkgDesci$Packaged, 
+                                ';')[[1]][1])
             xnew[ip, ic] <- pkgd
 #          xout$Packaged[ip] <- pkgd
           } else
@@ -65,13 +80,14 @@ PackageSum2.data.frame <- function(x,
 #  using R version 3.0.1 Patched (2013-06-21 r63003)
 #  using platform: i386-pc-solaris2.10 (32-bit) in a CRAN test
 #  For x$Package[ip] == 'base', dim(vignette(.)$results) = 0  4
-#                  vig <- (vignette(package=x$Package[ip])$results)
+#         vig <- (vignette(package=x$Package[ip])$results)
                   xPi <- x$Package[ip]
                   VIG <- utils::vignette(package=x$Package[ip])
                   vig <- VIG$results
                   if(nrow(vig)>1){
                     clps <- paste(vig[, 'Item'], collapse=', ')
-                    xnew[ip, ic] <- paste(nrow(vig), clps, sep=':  ')
+                    xnew[ip, ic] <- paste(nrow(vig), clps, 
+                                          sep=':  ')
                   } else if(nrow(vig)>0)
                       xnew[ip, ic] <- vig[ 1, 'Title']
                 }

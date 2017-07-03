@@ -159,9 +159,8 @@ summary(PL)
 <<summary.PL-print,echo=FALSE>>=
 s <- summary(PL)
 blank <- data.frame(Package = "<...>",
-                    Count = "", MaxScore = "",
-                    TotalScore = "",
-                    Date = "")
+      Count = "", MaxScore = "", TotalScore = "",
+      Date = "", pkgLink='')
 s$PackageSummary[] <- lapply(s$PackageSummary[], as.character)
 row.names(s$PackageSummary) <-
   as.character(s$PackageSummary$Package)
@@ -541,9 +540,9 @@ S.~Theu\ss{}l and A.~Zeileis
 \end{thebibliography}
 
 \address{Spencer Graves \\
-Structure Inspection and Monitoring \\
-San Jose, CA} \\
-\email{spencer.graves@prodsyse.com}
+EffectiveDefense.org \\
+Oveland Park, CA} \\
+\email{spencer.graves@effectivedefense.org}
 
 \address{Sundar Dorai-Raj \\
 Google \\
