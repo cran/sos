@@ -5,11 +5,14 @@
   matches attribute of a findFn object
 }
 \description{
-  Returns the \code{matches} attribute of a \code{findFn} object.
-  For the output of \code{findFn}, this is the number of  matches
-  for the search term.  For a \code{findFn} object returned by
-  \code{unionFindFn} or \code{intersectFindFn}, this is a
-  numeric vector if the \code{matches} attributes of the arguments to
+  Returns the \code{matches} attribute of a
+  \code{\link{findFn}} object.  For the output of
+  \code{findFn}, this is the number of  matches
+  for the search term.  For a \code{findFn} 
+  object returned by \code{\link{unionFindFn}} or
+  \code{\link{intersectFindFn}}, this is a
+  numeric vector if the \code{matches} attributes of
+  the arguments to
   \code{unionFindFn} or \code{intersectFindFn}.
 }
 \usage{
@@ -22,11 +25,12 @@ hits(x)
   }
 }
 \details{
-  nrow(x)
-  attr(x, 'matches')
+  \code{nrow(x)}
+  \code{attr(x, 'matches')}
 }
 \value{
-  a list with components \code{nrows} and \code{matches}
+  a list with components \code{nrows} and 
+  \code{matches}
 }
 \author{Spencer Graves}
 \seealso{

@@ -35,38 +35,44 @@ writeFindFn2xls <- function(x,
 #  WX <- FALSE
 #  OB <- FALSE
 ##
+## Don't write a file for CRAN 
+##
+  if(fda::CRAN()){
+    cat('write nothing on CRAN')
+  } else {
+##
 ## 4.  Will WriteXLS work?
 ##
-    if(requireNamespace('WriteXLS', quietly=TRUE)){
-      WX <- TRUE
-      if(tP <- WriteXLS::testPerl()){
-        WXo <- try(WriteXLS::WriteXLS(c('sum2', 'x2.', 'cl'),
+      if(requireNamespace('WriteXLS', quietly=TRUE)){
+        WX <- TRUE
+        if(tP <- WriteXLS::testPerl()){
+          WXo <- try(WriteXLS::WriteXLS(c('sum2', 'x2.', 'cl'),
                  ExcelFileName=file.,
                  SheetNames=c('PackageSum2', 'findFn', 'call') ))
-        if(class(WXo)!='try-error')return(invisible(file.))
+          if(class(WXo)!='try-error')return(invisible(file.))
+        }
       }
-    }
 ##
 ## 5.  How about RODBC?
 ##
-    if(requireNamespace('RODBC', quietly=TRUE)){
-      RO <- TRUE
-      xlsFile <- try(RODBC::odbcConnectExcel(file., readOnly=FALSE))
-      if(class(xlsFile)!='try-error'){
-        on.exit(RODBC::odbcClose(xlsFile))
+     if(requireNamespace('RODBC', quietly=TRUE)){
+        RO <- TRUE
+        xlsFile <- try(RODBC::odbcConnectExcel(file., readOnly=FALSE))
+        if(class(xlsFile)!='try-error'){
+          on.exit(RODBC::odbcClose(xlsFile))
 #   Create the sheets
-        sum2. <- try(RODBC::sqlSave(xlsFile, sum2, tablename='PackageSum2'))
-        if(class(sum2.)!='try-error'){
-          x. <- try(RODBC::sqlSave(xlsFile, as.data.frame(x2),
+          sum2. <- try(RODBC::sqlSave(xlsFile, sum2, tablename='PackageSum2'))
+          if(class(sum2.)!='try-error'){
+            x. <- try(RODBC::sqlSave(xlsFile, as.data.frame(x2),
                                    tablename='findFn'))
 #
-          if(class(x.)!='try-error'){
-            cl. <- try(RODBC::sqlSave(xlsFile, cl, tablename='call'))
-            if(class(cl.)!='try=error')return(invisible(file.))
+            if(class(x.)!='try-error'){
+              cl. <- try(RODBC::sqlSave(xlsFile, cl, tablename='call'))
+              if(class(cl.)!='try=error')return(invisible(file.))
+            }
           }
         }
       }
-    }
 ##
 ## 6.  XLConnect?
 ##
@@ -135,13 +141,13 @@ writeFindFn2xls <- function(x,
    #       print(xlsClose)
     #    } else print(xlsFile)
     #}
-  warning('\n*** UNABLE TO WRITE xls FILE;  writing 3 csv files instead.')
-  xName <- deparse(substitute(x))
-  assign(xName, x)
-  file0 <- sub('\\.xls$', '', file.)
-  saveFile <- paste(file0, 'rda', sep='.')
-  do.call(save, list(list=xName, file=saveFile))
-  cat('NOTE:  x = ', xName, ' saved to ', saveFile,
+    warning('\n*** UNABLE TO WRITE xls FILE;  writing 3 csv files instead.')
+    xName <- deparse(substitute(x))
+    assign(xName, x)
+    file0 <- sub('\\.xls$', '', file.)
+    saveFile <- paste(file0, 'rda', sep='.')
+    do.call(save, list(list=xName, file=saveFile))
+    cat('NOTE:  x = ', xName, ' saved to ', saveFile,
       '\nin case you want to try in, e.g., Rgui i386;\n',
       '> load(\"', saveFile, '\"); findFn2xls(', xName, ')\n',
       sep='')
@@ -149,12 +155,13 @@ writeFindFn2xls <- function(x,
 ##
 ## 9.  Write 3 csv files
 ##
-  f.xls <- regexpr('\\.xls', file.)
-  if(f.xls>0)file. <- substring(file., 1, f.xls-1)
+   f.xls <- regexpr('\\.xls', file.)
+    if(f.xls>0)file. <- substring(file., 1, f.xls-1)
 #
-  file3 <- paste(file., c('-sum.csv', '.csv', '-call.csv'), sep='')
-  utils::write.csv(sum2, file3[1], ...)
-  utils::write.csv(x, file3[2], ...)
-  utils::write.csv(cl, file3[3], ...)
+    file3 <- paste(file., c('-sum.csv', '.csv', '-call.csv'), sep='')
+    utils::write.csv(sum2, file3[1], ...)
+    utils::write.csv(x, file3[2], ...)
+    utils::write.csv(cl, file3[3], ...)
+  }
   return(invisible(file.))
 }

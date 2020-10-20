@@ -136,7 +136,7 @@ PackageSum2.data.frame <- function(x,
       x.
   }
   x. <- cbind(x, xnew.)
-  rownames(x.) <- 1:nx
+  rownames(x.) <- seq(1, length=nx)
   x.$Title <- fixSpace(x.$Title)
   x.$Author <- fixSpace(x.$Author)
   x.$Maintainer <- fixSpace(x.$Maintainer)

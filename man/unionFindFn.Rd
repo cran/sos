@@ -6,10 +6,12 @@
   Combine findFn Objects
 }
 \description{
-  Combines to \code{findFn} objects into a new \code{findFn}
-  object with only one row for any help page duplicated between the
-  two.  \code{unionFindFn} removes duplicate entries.
-  \code{intersectFindFn} keeps only the duplicates.
+  Combines to \code{\link{findFn}} objects into a 
+  new \code{findFn} object with only one row for 
+  any help page duplicated between the two. 
+  \code{unionFindFn} removes duplicate entries.
+  \code{intersectFindFn} keeps only the 
+  duplicates.
 }
 \usage{
 unionFindFn(e1, e2, sortby=NULL)
@@ -24,31 +26,35 @@ intersectFindFn(e1, e2, sortby=NULL)
     objects of class \code{findFn}.
   }
   \item{sortby}{
-    Optional \code{sortby} argument used by \code{sortFindFn} and
-    \code{findFn}.  Default is the \code{sortby} argument
-    in \code{attr(e1, 'call')}.
+    Optional \code{sortby} argument used by
+    \code{sortFindFn} and \code{findFn}.  Default 
+    is the \code{sortby} argument in 
+    \code{attr(e1, 'call')}.
   }
 }
 \details{
-  1.  e12 <- rbind(e1, e2)
+  1.  \code{e12 <- rbind(e1, e2)}
 
-  2.  For any (\code{Package}, \code{Function}) appearing in both
-  \code{e1} and \code{e2}, the row with the largest \code{Score} is
-  retained and the other is deleted.
+  2.  For any (\code{Package}, \code{Function})
+  appearing in both \code{e1} and \code{e2}, the 
+  row with the largest \code{Score} is retained 
+  and the other is deleted.
 
-  3.  Apply \code{sortFindFn} to the rebuild the summary and sort
-  the result as desired.
+  3.  Apply \code{sortFindFn} to the rebuild the
+  summary and sort the result as desired.
 
-  4.  attr(e12, 'matches') <- c(attr(e1, 'matches'), attr(e2,
-  'matches'))
+  4.  \code{attr(e12, 'matches')} <- 
+  \code{c(attr(e1, 'matches'), attr(e2,
+  'matches'))}
 }
 \note{
-  Binary operators \samp{&} and \samp{|} are implemented for the S3
-  class \samp{findFn}
+  Binary operators \samp{&} and \samp{|} are
+  implemented for the S3 class \samp{findFn}
 }
 \value{
-  an object with class c('findFn', 'data.frame') as returned by
-  \code{sortFindFn} and \code{findFn}.
+  an object with class 
+  \code{c('findFn', 'data.frame')} as returned 
+  by \code{sortFindFn} and \code{findFn}.
 }
 \author{
   Spencer Graves and Romain Francois

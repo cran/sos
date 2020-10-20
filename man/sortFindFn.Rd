@@ -2,30 +2,34 @@
 \alias{sortFindFn}
 \title{Sort a findFn Object}
 \description{
-  Sort a \code{data.frame} as a findFn object.
+  Sort a \code{\link{data.frame}} as a 
+  \code{\link{findFn}} object.
 }
 \usage{
 sortFindFn(x, sortby=NULL)
 }
 \arguments{
   \item{x}{
-    a \code{data.frame} to sort and convert to an object of class
-    \code{findFn} (if it does not alreay have this class).
+    a \code{data.frame} to sort and convert to an
+    object of class \code{\link{findFn}} (if it 
+    does not already have this class).
   }
   \item{sortby}{
-    sort information as for function \code{findFn}.
+    sort information as for function 
+    \code{findFn}.
   }
 }
 \details{
-  1.  pkgSum <- PackageSummary(x, sortby)
+  1.  \code{pkgSum <- PackageSummary(x, sortby)}
 
-  2.  Order x as required for \code{findFn}
+  2.  Order \code{x} as required for \code{findFn}
 
-  3.  class = c("findFn", "data.frame")
+  3.  class = \code{c("findFn", "data.frame")}
 }
 \value{
-  An object of class c('findFn', 'data.frame') with a
-  "PackageSummary" attribute.
+  An object of class 
+  \code{c('findFn', 'data.frame')} with a
+  \code{"PackageSummary"} attribute.
 }
 \author{Spencer Graves}
 \seealso{

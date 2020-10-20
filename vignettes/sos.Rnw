@@ -72,7 +72,7 @@ The {\tt print} method for objects of class {\tt "findFn"}
 displays the results as a table in a web
 browser with links to the individual help pages, sorted by package,
 displaying the results from the package with the most matches first.  This
-behaviour differs from that of the {\tt RSiteSearch} function in the
+behavior differs from that of the {\tt RSiteSearch} function in the
 \pkg{utils} package in more ways than the sort order.  First, {\tt findFn}
 returns the results in R as a data frame, which can be further
 manipulated.  Second, the ultimate display in a web browser is a
@@ -416,7 +416,7 @@ The {\tt de.}\ object has \Sexpr{nrow(de.)} rows, which suggests that
 the corresponding intersection must have (\Sexpr{nrow(de)} + \Sexpr{nrow(des)} $-$ \Sexpr{nrow(de.)} = \Sexpr{nrow(de) + nrow(des) - nrow(de.)}). This can be confirmed via {\tt nrow(de \& des)}.
 (\samp{\&} is an alias for {\tt intersectFindFn}.)
 
-To make everthing in {\tt de.}\ locally available, we can use
+To make everything in {\tt de.}\ locally available, we can use
 {\tt installPackages(de., minCount = 1)}.  This installed all
 referenced packages except {\tt rmutil} and a dependency {\tt Biobase},
 which were not available on CRAN but are included in Jonathan
@@ -520,8 +520,8 @@ J.~Chambers.
 %  August 2009.
 %\newblock conference presentation.
 
-\bibitem[{Openoffice.org}(2009)]{CALC09MAN}
-{Openoffice.org}.
+\bibitem[{OpenOffice.org}(2009)]{CALC09MAN}
+{OpenOffice.org}.
 \newblock \emph{Open Office Calc}.
 \newblock Sun Microsystems, California, USA, 2009.
 \newblock URL \url{http://www.openoffice.org}.
@@ -541,7 +541,7 @@ S.~Theu\ss{}l and A.~Zeileis
 
 \address{Spencer Graves \\
 EffectiveDefense.org \\
-Oveland Park, CA} \\
+Kansas City, Missouri} \\
 \email{spencer.graves@effectivedefense.org}
 
 \address{Sundar Dorai-Raj \\

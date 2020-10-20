@@ -4,16 +4,20 @@
   Replace backslash with forward slash in a character string
 }
 \description{
-  scan a character string with backslash as the quote character and
-  return it with backslashs replaced by forward slash.
+  scan a character string with backslash as the 
+  quote character and return it with backslashes
+  replaced by forward slash.
 
-  NOTE:  'c:\\User' cannot be assigned to a character variable, because
-  '\\U' must be followed by a hexidecimal number, and 's' is not a legal
-  hexidecimal digit.  Therefore, we read the character string of
-  interest using scan rather than assigning it to a function argument.
+  NOTE:  'c:\\User' cannot be assigned to a 
+  character variable, because '\\U' must be followed
+  by a hexadecimal number, and 's' is not a legal
+  hexadecimal digit.  Therefore, we read the 
+  character string of interest using scan rather 
+  than assigning it to a function argument.
 }
 \usage{
-back2ForwardSlash(nmax=1, what=character(), sep='\\n', ...)
+back2ForwardSlash(nmax=1, what=character(), 
+      sep='\\n', ...)
 }
 \arguments{
   \item{nmax, what, sep, \dots}{
@@ -21,16 +25,19 @@ back2ForwardSlash(nmax=1, what=character(), sep='\\n', ...)
   }
 }
 \details{
-  It's not easy to turn a back slash into a forward slash, because R
-  interprets the back slash as an escape character.
-  \code{back2ForwardSlash} tells R to read the next \code{nmax} lines,
-  replacing '\\' with '/'.
+  It's not easy to turn a back slash into a forward
+  slash, because R interprets the back slash as an
+  escape character.
+  \code{back2ForwardSlash} tells R to read the next 
+  \code{nmax} lines, replacing '\\' with '/'.
 }
 \value{
-  character vector with backslashes replaced by forward slashes.
+  character vector with backslashes replaced by
+  forward slashes.
 }
 \author{
-  Spencer Graves with help from Richard Cotton and Garrett See
+  Spencer Graves with help from Richard Cotton and
+  Garrett See.
 }
 \seealso{
   \code{\link{scan}}

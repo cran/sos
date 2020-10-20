@@ -74,18 +74,21 @@ PackageSum2(x,
   in the column \code{Package}.  Also, for any packages
   that are installed, replace the \code{Date} with the
   \code{Packaged} date.  The \code{Date} in Baron's
-  RSiteSearch database is the date of acquisition, which
-  will typically be more recent than the \code{Packaged}
-  date provided the locally installed package has the same
-  version as that in Baron's database.  To get the best
-  information from \code{PackageSum2}, it is wise to first
-  run both \code{\link{installPackages}} to ensure that
-  the packages of greatest interest are installed locally
-  and \code{update.packages()} to make sure you have the 
-  latest versions installed locally.  Similarly, if
-  \code{PackageSum2} does not contain complete interest on
-  a package of interest, this can be fixed by installing
-  the package and rerunning \code{PackageSum2}.
+  \code{RSiteSearch} database is the date of
+  acquisition, which will typically be more recent
+  than the \code{Packaged}
+  date provided the locally installed package has 
+  the same version as that in Baron's database.  To
+  get the best information from \code{PackageSum2},
+  it is wise to first run both
+  \code{\link{installPackages}} to ensure that
+  the packages of greatest interest are installed
+  locally and \code{update.packages()} to make sure
+  you have the latest versions installed locally. 
+  Similarly, if \code{PackageSum2} does not contain
+  complete interest on a package of interest, this
+  can be fixed by installing the package and
+  rerunning \code{PackageSum2}.
 }
 \value{
   a data.frame with additional \code{fields} columns

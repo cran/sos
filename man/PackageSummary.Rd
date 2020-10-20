@@ -2,58 +2,63 @@
 \alias{PackageSummary}
 \title{Summarize findFn Results by Package}
 \description{
-  Returns a \code{\link{data.frame}} with one row for each 
-  package and columns \code{Count} = number of rows in the 
-  search results for that package, \code{maxScore} and 
-  \code{totalScore} = max and total score for help pages 
-  found from that package.
+  Returns a \code{\link{data.frame}} with one row 
+  for each package and columns \code{Count} = number
+  of rows in the search results for that package,
+  \code{maxScore} and \code{totalScore} = max and
+  total score for help pages found from that 
+  package.
 }
 \usage{
 PackageSummary(x, sortby=NULL)
 }
 \arguments{
   \item{x}{
-    a data.frame with columns \code{Package}, \code{Score}, 
-    and \code{Date}.
+    a data.frame with columns \code{Package},
+    \code{Score}, and \code{Date}.
   }
   \item{sortby}{
-    a character vector specifying how the \code{data.frame} 
-    returned should be sorted.  Default = c('Count', 
-    'MaxScore', 'TotalScore', 'Package') to sort descending 
-    on numerics and ascending on alphnumerics.  Specifying 
-    sortby = c('c', 't', 'm') is equivalent to c('Count', 
-    'TotalScore', 'MaxScore', 'Package', 'Score', 
-    'Function').
+    a character vector specifying how the 
+    \code{data.frame} returned should be sorted. 
+    Default = 
+    \code{c('Count', 'MaxScore', 'TotalScore', 'Package')}
+    to sort descending on numerics and ascending on
+    alphanumerics.  Specifying \code{sortby} = 
+    \code{c('c', 't', 'm')} is equivalent to 
+    \code{c('Count', 'TotalScore', 'MaxScore', 'Package')}.
 
-    Components of \code{sortby} must match either this list 
-    or c('Score', 'Function', 'Date', 'Description', 'Link').  
-    Any on this latter list are ignored without a warning.  
-    This allows the same \code{sortby} used for \code{findFn} 
-    to be used here.
+    Components of \code{sortby} must match either 
+    this list or 
+    \code{c('Score', 'Function', 'Date', 'Description', 'Link')}.  
+    Any on this latter list are ignored without a
+    warning.  This allows the same \code{sortby} 
+    used for \code{findFn} to be used here.
   }
 }
 \details{
-  1.  Convert x['Package] to character to automatically 
-  drop any unused levels of a factor.  
+  1.  Convert \code{x['Package']} to character to
+  automatically drop any unused levels of a factor.  
   
-  2.  Compute Count, TotalScore, and MaxScore.  
+  2.  Compute \code{Count, TotalScore, and MaxScore}. 
   
-  3.  Find the first occurrence of each Package, and use 
-  that to convert the Link to the first help page to 
-  \code{pkgLink} = a link for the package.  For example, 
-  the Link to 'html' for help('c') is 
-  'http://finzi.psych.upenn.edu/R/library/base/html/c.html', 
-  and \code{pkgLink} to the 'html' overview for 'base' is 
-  'http://finzi.psych.upenn.edu/R/library/base/html/00Index.html'.  
+  3.  Find the first occurrence of each Package, and 
+  use that to convert the Link to the first help 
+  page to \code{pkgLink} = a link for the package. 
+  For example, the Link to 'html' for help('c') is 
+  \code{'http://finzi.psych.upenn.edu/R/library/base/html/c.html'}, 
+  and \code{pkgLink} to the 'html' overview for 
+  'base' is 
+  \code{'http://finzi.psych.upenn.edu/R/library/base/html/00Index.html'}.  
   
-  4.  Assemble into a \code{\link{data.frame}}, sort and 
-  return.  
+  4.  Assemble into a \code{\link{data.frame}}, 
+  sort and return.  
 }
 \value{
-  a \code{\link{data.frame}} with one row for each package and 
-  columns \code{Package}, \code{Count}, \code{MaxScore}, 
-  \code{TotalScore}, \code{Date}, and \code{pkgLink}, 
-  sorted as specified by \code{sortby}.
+  a \code{\link{data.frame}} with one row for each
+  package and columns \code{Package}, \code{Count},
+  \code{MaxScore}, \code{TotalScore}, \code{Date}, 
+  and \code{pkgLink}, sorted as specified by
+  \code{sortby}.
 }
 \author{Spencer Graves}
 \seealso{

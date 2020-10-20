@@ -13,8 +13,8 @@ packageSum.findFn <- function(x,
         'vignette', 'URL'), 
     lib.loc=NULL, ...){
 #  cat('packageSum.findFn: enter\n')
-  ps2 <- packageSum(attr(x, 'PackageSummary'), 
-             fields, lib.loc, ...)
+  psa <- attr(x, 'PackageSummary')
+  ps2 <- packageSum(psa, fields, lib.loc, ...)
   if(is.null(attr(ps2, 'call')))
     attr(ps2, 'call') <- attr(x, 'call')
   if(is.null(attr(ps2, 'string')))
