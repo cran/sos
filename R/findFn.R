@@ -23,12 +23,10 @@ findFn <- function(string,
 ## 1.  Define internal function
 ## 
   parseLinks <- function(links) {
-    lnk <- sub("<dt>.*<strong><a href=\\\"(.*\\.html)\\\">.*$", 
-               "\\1", links, useBytes = TRUE)
-    desc0 <- sub("<dt>.*<strong><a href=\\\".*\\\">R.*:(.*)</a>.*$", 
+    lnk <- paste0("https://search.r-project.org",sub(".*url=\\\"(.*)\\\" .*$", 
+               "\\1", links, useBytes = TRUE))
+    desc <- sub(".*title=\\\"(.*)\\\".*$", 
                  "\\1", links, useBytes = TRUE)
-    desc <- gsub("(<strong class=\"keyword\">)|(</strong>)|^[ ]+|[ ]+$", 
-                 "", desc0, useBytes = TRUE)
     list(link = lnk, description = desc)
   }
 #  
@@ -63,24 +61,21 @@ findFn <- function(string,
       return(ans)
     }
 #   Find the hit count
-    hitPattern <- "^.*<!-- HIT -->(.*)<!-- HIT -->.*$"
-    hitRows <- html[grep(hitPattern, html, useBytes = TRUE)]
-#
-    Hits <- as.numeric(sub(hitPattern, "\\1", hitRows, useBytes = TRUE))
+    hitRows <- html[grep("^<results .* Matches=", html, useBytes = TRUE)]
+    Hits <- as.numeric(sub("^<results .*Matches=\\\"(.*)\\\" .*$", "\\1", hitRows, useBytes = TRUE))
 #   Find dates
-    findDates <- grep("<strong>Date</strong>", html, useBytes = TRUE)
-    dates <- html[findDates]
-    links <- html[findDates - 2]
+    DateRows <- html[grep("^<hit .* modtime=", html, useBytes = TRUE)]
+    Date <- as.numeric(sub("^<hit .*modtime=\\\"(.*)\\\".*$", "\\1", DateRows, useBytes = TRUE))
+    linksRows <- html[grep(".*url=", html, useBytes = TRUE)]
+      
     pattern <-
-      "^.*http://finzi.psych.upenn.edu/R/library/(.*)/html/(.*)\\.html.*$"
-    pac <- sub(pattern, "\\1", links, useBytes = TRUE)
-    fun <- sub(pattern, "\\2", links, useBytes = TRUE)
-    scoreLoc <- regexpr("score:", links, useBytes = TRUE)
-    scorePattern <- "^.*\\(score: ([0-9]+)\\).*$"
-    scoreCh <- sub(scorePattern, "\\1", links, useBytes = TRUE)
+      "^.*/(CRAN|R)/refmans/(.*)/html/(.*)\\.html.*$"
+    pac <- sub(pattern, "\\2", linksRows, useBytes = TRUE)
+    fun <- sub(pattern, "\\3", linksRows, useBytes = TRUE)
+    
+    scoreCh <- sub(".*relevance=\\\"(.*)%\\\".*", "\\1", html[grep(".*relevance=", html, useBytes = TRUE)], useBytes = TRUE)
     score <- as.numeric(scoreCh)
-    Date <- sub("^.*<em>(.*)</em>.*$", "\\1", dates, useBytes = TRUE)
-    pLinks <- parseLinks(links)
+    pLinks <- parseLinks(linksRows)
 #    if (length(pac) < 1 && length(Date) > 0) {
     if (length(pac) < 1) {
       countDocs <- grep("Too many documents hit. Ignored",
@@ -101,7 +96,7 @@ findFn <- function(string,
     }
     Ans <- data.frame(Package = pac,
                       Function = fun,
-                      Date = strptime(Date, "%a, %d %b %Y %T"),
+                      Date = as.POSIXct(Date, origin="1970-01-01"),
                       Score = score,
                       Description = pLinks$description,
                       Link = pLinks$link, stringsAsFactors=FALSE)
@@ -117,14 +112,31 @@ findFn <- function(string,
 ##
 ## 2.  Set up query
 ##
+## the following no longer works properly with R 4.1.0:  
   if (substr(string, 1, 1) != "{") {
     string <- gsub(" ", "+", string)
   } else {
     ## scan(url(...)) fails with spaces
     string <- gsub(" ", "%20", string)
   }
-  fmt <- paste("http://search.r-project.org/cgi-bin/namazu.cgi?",
-          "query=%s&max=20&result=normal&sort=score&idxname=functions",
+## With R 4.1.0, the previous code for parseHTML
+## no longer worked with "{...}" to search for 
+## a string, not multiple words.
+## However, RSiteSearch('{...}') worked ...
+## by searching for '"..."'.  
+## SO if string begins with "{" and ends woth "}", 
+## wrap that in double quotes 
+## UNLESS it contains a double quote, 
+## in which case give a warning.
+  string <- gsub(" ", "+", string)
+  ns <- nchar(string)
+  if((substring(string, 1, 1) == '{') &&
+     (substring(string, ns, ns) == "}")){
+    substring(string, 1, 1) <- '"'
+    substring(string, ns, ns) <- '"'
+  }
+  fmt <- paste("https://search.r-project.org/?",
+          "P=%s&HITSPERPAGE=20&FMT=xml&SORT=&DB=cran-help&DB=r-help",
                sep = "")
   href <- sprintf(fmt, string)
 ##
@@ -176,7 +188,7 @@ findFn <- function(string,
         if((i%%10)==0) cat('\n')
         utils::flush.console()
       }
-      href.i <- sprintf("%s&whence=%d", href, 20 * (i - 1))
+      href.i <- sprintf("%s&[=%d", href, i)
       ans <- rbind(ans, parseHTML(href.i))
     }
     if (verbose>0) cat("\n")

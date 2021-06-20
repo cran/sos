@@ -1,7 +1,5 @@
-print.packageSum <- function(x,
-    where, title,
-    openBrowser = TRUE,
-    template,  ...) {
+print.packageSum <- function(x, where, title, 
+      openBrowser = TRUE, template,  ...) {
 ##
 ## 0.  If x has 0 rows, don't go
 ##    further ...

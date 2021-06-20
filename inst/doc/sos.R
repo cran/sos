@@ -16,7 +16,8 @@ help.search('Petal.Length')
 ###################################################
 ### code chunk number 3: PL.RSiteSearch
 ###################################################
-if(!fda::CRAN()){
+library(sos)
+if(!CRAN()){
   RSiteSearch('Petal.Length')
 }
 
@@ -24,7 +25,6 @@ if(!fda::CRAN()){
 ###################################################
 ### code chunk number 4: Petal.Length.sos
 ###################################################
-library(sos)
 PL <- findFn('Petal.Length')
 
 
@@ -74,7 +74,7 @@ print(PL[PL$Package == 'datasets', 'Function'], max.levels = 0)
 ###################################################
 ### code chunk number 10: RSiteSearch-spline
 ###################################################
-if(!fda::CRAN()){
+if(!CRAN()){
   RSiteSearch('spline')
 }
 
@@ -100,7 +100,7 @@ splineHits <- getRSiteSearchHits("http://search.r-project.org/cgi-bin/namazu.cgi
 ###################################################
 ### code chunk number 12: RSiteSearch-spline-fun
 ###################################################
-if(!fda::CRAN()){
+if(!CRAN()){
   RSiteSearch('spline', 'fun')
 }
 
@@ -133,7 +133,7 @@ splineAll[selSpl, ]
 ###################################################
 ### code chunk number 17: sos-spline-grep
 ###################################################
-if(!fda::CRAN()){
+if(!CRAN()){
   grepFn('spline', splineAll, ignore.case = TRUE)
 }
 

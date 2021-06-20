@@ -52,8 +52,6 @@ findFn(string, maxPages = 100, sortby = NULL,
     If greater than 1, additional information is
     provided on the download process.
   }
-%   \item{e1}{ \code{string} }
-%   \item{e2}{ \code{maxPages} }
   \item{\dots}{ignored}
 }
 \details{
@@ -75,7 +73,8 @@ findFn(string, maxPages = 100, sortby = NULL,
 
   3.  Sort \code{PackageSummary} in the order 
   defined by the occurrence of 
-  \code{c('Count', 'MaxScore', 'TotalScore', 'Package')} in \code{sortby}.
+  \code{c('Count', 'MaxScore', 'TotalScore', 'Package')}
+  in \code{sortby}.
 
   4.  Merge \code{PackageSummary} with the 
   \code{data.frame} of search matches.
@@ -115,7 +114,7 @@ findFn(string, maxPages = 100, sortby = NULL,
       	website (link below) for more information 
       	on how the score is determined.
       }
-      \item{\code{Package}}s{
+      \item{\code{Package}}{
       	Name of the package containing a help 
       	page meeting the search criteria
       }
@@ -123,7 +122,7 @@ findFn(string, maxPages = 100, sortby = NULL,
       	Name of the help page found that meets 
       	the indicated search criterion.
       }
-      \item{\code{Date}}{ Date of the help page}
+      \item{\code{Date}}{Date of the help page}
       \item{\code{Score}}{
       	Score returned by \code{RSiteSearch},
       	discussed in the Namazu	website (link 
@@ -168,11 +167,20 @@ findFn(string, maxPages = 100, sortby = NULL,
   Spencer Graves, Sundar Dorai-Raj, Romain Francois.
   Duncan Murdoch suggested the "???" alias for
   \code{findFn} and contributed the code for it.
+  
+  Special thanks to Gennadiy Starostin, 
+  Vienna University of Economics and Business
+  (Wirtschaftsuniversitaet Wien), who in early 
+  2021 took over maintenance of the 
+  \code{\link{RSiteSearch}} data base, updated 
+  its structure, and rewrote 
+  \code{findFn} to match.  
 
   Special thanks to Jonathan Baron and Andy Liaw. 
-  Baron maintains the \code{RSiteSearch} data base. 
-  Liaw and Baron created the \code{RSiteSearch}
-  function in the \code{utils} package.
+  Baron maintained the \code{RSiteSearch} data 
+  base for many years.  Liaw and Baron created the
+  \code{RSiteSearch} function in the \code{utils}
+  package.
 }
 \seealso{
   \code{\link{help.search}} to search only 
@@ -200,11 +208,15 @@ findFn(string, maxPages = 100, sortby = NULL,
 \examples{
 # Skip these tests on CRAN,
 # because they take more than 5 seconds
-if(!fda::CRAN()){
+if(!CRAN()){
 
 z <- findFn("spline", maxPages = 2)
 # alternative
 zq <- ???spline(2)
+
+# Confirm z == zq except for 'call' 
+  attr(z, 'call') <- NULL
+  attr(zq, 'call') <- NULL
 
 \dontshow{stopifnot(}
 all.equal(z, zq)
@@ -221,24 +233,6 @@ matches(RSS.) # list(nrow = 0, matches = 0)
 # example in which resulting page has some unicode characters
 Lambert <- findFn("Lambert")
 Lambert
-##
-## Too many matches
-##
-fa <- findFn('factor analysis')
-# Finds too many matches to process;
-# reports Inf matches but returns none.
-# When this happens, use a more restrictive search
-
-# check
-fa0 <- RSS.[seq(1, length=0),]
-attr(fa0, 'matches') <- Inf
-attr(fa0, 'PackageSummary') <- PackageSummary(fa0)
-attr(fa0, 'string') <- 'factor+analysis'
-attr(fa0, 'call') <- call('findFn', string = "factor analysis")
-
-\dontshow{stopifnot(}
-all.equal(fa, fa0)
-\dontshow{)}
 }
 }
 \keyword{misc}

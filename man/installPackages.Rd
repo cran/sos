@@ -79,7 +79,10 @@ installPackages(spl, minCount=spl[1, 'Count']+1)
 
 # default: install packages with 
 # Count>=minCount
-\dontrun{
+#\dontrun is sometimes run on CRAN.  See
+#https://github.com/ThinkR-open/prepare-for-cran
+#accessed 2021-06-14
+if (interactive()) {
 installPackages(spl)
 }
 
@@ -92,7 +95,7 @@ splS <- packageSum(spl)
 installPackages(splS, splS[1, 'Count']+1)
 
 # install ALL packages
-\dontrun{
+if (interactive()) {
 installPackages(splS, 1)
 }
 

@@ -1,4 +1,4 @@
-export("?", back2ForwardSlash, findFn, findFn2xls, grepFn,
+export("?", back2ForwardSlash, CRAN, findFn, findFn2xls, grepFn,
        hits, installPackages, intersectFindFn, matches,
        Ops.findFn, packageSum,
        PackageSum2, PackageSummary, sortFindFn,

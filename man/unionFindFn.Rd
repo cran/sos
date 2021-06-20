@@ -93,12 +93,12 @@ all.equal(de2, de2.)
 
 # summary and print still work with the combined object.
 summary(de.s)
-if(!fda::CRAN()){
+if(!CRAN()){
   de.s
 }
 
 summary(de2)
-if(!fda::CRAN()){
+if(!CRAN()){
   de2
 }
 

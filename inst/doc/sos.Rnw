@@ -108,7 +108,8 @@ help.search('Petal.Length')
 @
 When this failed, many users might then try
 <<PL.RSiteSearch>>=
-if(!fda::CRAN()){
+library(sos)
+if(!CRAN()){
   RSiteSearch('Petal.Length')
 }
 @
@@ -118,7 +119,6 @@ when it was tried one day (and 62 matches a few months later).
 only the help pages.  We can get something similar and for
 many purposes more useful, as follows:
 <<Petal.Length.sos>>=
-library(sos)
 PL <- findFn('Petal.Length')
 @
 {\tt PL} is a data frame of class {\tt "findFn"} identifying
@@ -192,7 +192,7 @@ Almost four years ago, the lead author of this article decided he
 needed to learn more about splines.  A literature search
 began as follows:
 <<RSiteSearch-spline,results=hide>>=
-if(!fda::CRAN()){
+if(!CRAN()){
   RSiteSearch('spline')
 }
 @
@@ -216,7 +216,7 @@ While preparing this manuscript, this command identified
 \Sexpr{splineHits$hits} documents as of \Sexpr{splineHits$date}.  That is too many.  It can be
 restricted to functions as follows:
 <<RSiteSearch-spline-fun,results=hide>>=
-if(!fda::CRAN()){
+if(!CRAN()){
   RSiteSearch('spline', 'fun')
 }
 @
@@ -253,7 +253,7 @@ has that name.
 To look for help pages whose name includes the characters
 \samp{spline}, we can use {\tt grepFn}:
 <<sos-spline-grep,results=hide>>=
-if(!fda::CRAN()){
+if(!CRAN()){
   grepFn('spline', splineAll, ignore.case = TRUE)
 }
 @
