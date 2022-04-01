@@ -114,8 +114,19 @@ print.packageSum <- function(x, where, title,
     templateFile <- system.file("brew",
         "default", "pkgSum.brew.html",
         package = "sos")
-    template <- file(templateFile, 
-        encoding = "utf-8", open = "r" )
+# NOTE:  "pkgSum.brew.html" seems 
+# NOT to have been in sos at least 1.1-3, 2009-09-07
+# so templateFile == '' since then.      
+# R 4.1.0 may changed 'file' to give a warning for
+# template <- file(templateFile, encoding = "utf-8", open = "r" )
+    nch_tF <- nchar(templateFile)
+    if(nch_tF>0){
+      template <- file(templateFile, 
+          encoding = "utf-8", open = "r" )
+    } else {
+      template <- file(templateFile, 
+          encoding = "utf-8", open = "w+" )
+    }
   }
 ## "brew( template,  File )" malfunctioned;
 ## try putting what we need in a special environment
@@ -141,11 +152,12 @@ print.packageSum <- function(x, where, title,
 ##
   FileInfo <- file.info(File)
   if (is.na(FileInfo$size) || FileInfo$size <= 0) {
-    if (is.na(FileInfo$size)) {
-      warning("Brew did not create file ", File)
-    } else {
-      warning("Brew created a file of size 0")
-    }
+#  2021-06-26: Maybe I don't need these warnings?    
+#    if (is.na(FileInfo$size)) {
+#      warning("Brew did not create file ", File)
+#    } else {
+#      warning("Brew created a file of size 0")
+#    }
     cat("Ignoring template.\n")
 ## Sundar's original construction:
     con <- file(File, "wt")

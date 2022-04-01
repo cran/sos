@@ -50,6 +50,9 @@ installPackages.packageSum <- function(x, minCount,
 ##
   if (length(notInst) > 0){
     print(getOption('repos'))
+    if(is.na(nchar(repos) | 
+      (nchar(repos)<25))) 
+      repos <- "https://cran.rstudio.com/" 
     utils::install.packages(notInst, repos=repos)
   }
 }

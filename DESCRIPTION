@@ -1,16 +1,16 @@
 Package: sos
 Title: Search Contributed R Packages, Sort by Package
-Version: 2.1-0
-Date: 2021-06-13
+Version: 2.1-4
+Date: 2022-03-29
 Author: Spencer Graves [cre, aut, cph], 
     Sundar Dorai-Raj [aut], and Romain Francois [ctb]
 Maintainer: Spencer Graves <spencer.graves@prodsyse.com>
 Description: Search contributed R packages, sort by package.
 License: GPL (>= 2)
 Depends: brew
-Suggests: RODBC, WriteXLS
+Suggests: RODBC, WriteXLS, testthat
 Language: en-us
 NeedsCompilation: no
-Packaged: 2021-06-19 01:34:09 UTC; sg
+Packaged: 2022-04-01 02:22:19 UTC; spenc
 Repository: CRAN
-Date/Publication: 2021-06-20 20:30:02 UTC
+Date/Publication: 2022-04-01 04:10:02 UTC

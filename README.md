@@ -43,7 +43,7 @@ library(sos)
 #> 
 #>     ?
 (PL <- findFn('Petal.Length'))
-#> found 90 matches;  retrieving 5 pages
+#> found 100 matches;  retrieving 5 pages
 #> 2 3 4 5 
 #> Downloaded 100 links in 63 packages.
 #> Warning in file(templateFile, encoding = "utf-8", open = "r"): file("") only
@@ -54,7 +54,7 @@ library(sos)
 ```
 
 The `print` method for an object of class `findFn`, like `PL`, opens two
-taps in the default browser: The first has links to individual help
+tabs in the default browser: The first has links to individual help
 pages sorted by package. The second is a package summary.
 
 The current version of `sos` extracts some information only from

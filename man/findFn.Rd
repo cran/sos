@@ -187,18 +187,21 @@ findFn(string, maxPages = 100, sortby = NULL,
       installed packages.
   \code{\link[utils]{RSiteSearch}},
   \code{\link[utils]{download.file}}
-  \url{http://finzi.psych.upenn.edu/search.html} 
-    for a web interface to this same search
-    capability with more general options.
   \code{findFn} searches only "Target:  Functions"
     from that site, ignoring the R-help archives.
 
-  \url{https://www.r-project.org/search.html} for 
+  For alternative R search capabilities, see:  
+
+  * \href{https://en.wikiversity.org/wiki/Searching_R_Packages}{"Searching R Packages" on Wikiversity}
+  
+  * \href{https://journal.r-project.org/archive/2018/RJ-2018-058/index.html}{Julia Silge, John C. Nash, and Spencer Graves (2018) Navigating the R Package Universe, The R Journal, 10(2) 558-563.}
+  
+  * \url{https://search.r-project.org} for 
     a list of alternative R search capabilities, 
     each of which may be best for different types 
     of inquiries.
 
-  \code{\link{findFunction}} for a completely
+  * \code{\link{findFunction}} for a completely
   different function with a similar name.
 }
 \references{
@@ -233,6 +236,12 @@ matches(RSS.) # list(nrow = 0, matches = 0)
 # example in which resulting page has some unicode characters
 Lambert <- findFn("Lambert")
 Lambert
+
+# Example that "found  2  link(s) without dates" on 2021-06-26
+webScr <- findFn('web scraping')
+
+# Example that "found 0 matches" on 2021-09-06
+findFn('{open history map}')
 }
 }
 \keyword{misc}

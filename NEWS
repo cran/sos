@@ -1,3 +1,6 @@
+2.1-1: Fix an intermittent bug giving "Error in data.frame(Package = pac, Function = fun, Date = as.POSIXct(Date,  : 
+  arguments imply differing number of rows: 0, 1" in certain circumstances.  2022-03-29.  
+
 2.1-0:  Update to fix problems with R 4.1.0, especially "???spline(2)" no longer recognized maxPages=2 and took the default instead.  Fixed.  2021-06-14.  
 
 2.0-2:  Delete inappropraite file and directory. 2020-10-19 

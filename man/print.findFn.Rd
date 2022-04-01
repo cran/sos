@@ -69,6 +69,10 @@ if(!CRAN()){
   print(splineSearch, 'console')
   splineSearch # all columns in a browser
 }
+webScr <- findFn('web scraping')
+if(!CRAN()){
+  print(webScr)
+}
 }
 \keyword{print}
 \keyword{methods}

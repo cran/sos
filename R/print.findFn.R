@@ -266,7 +266,8 @@ print.findFn <- function(x,
 #          variable(s) in this calling function 
 #          like 'title'   
         utils::browseURL(File)
-        print(packageSum(x, title=titSum, ...))
+        pS <- packageSum(x, title=titSum, ...)
+        print(pS)
       }
     }
   }

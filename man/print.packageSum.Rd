@@ -71,7 +71,7 @@ splinePkgs <- packageSum(splineHelp)
 if(!CRAN()){
   print(splinePkgs, 'console')
   splinePkgs # all columns in a browser
-\dontshow{
+
   des1 <- findFn('differential equations', 1)
   de1 <- findFn('differential equation', 1)
 # each retrieves 1 page of 20 hits
@@ -79,7 +79,10 @@ if(!CRAN()){
 
   de.s <- unionFindFn(des1, de1)
   de.s
-}  
+# Other example:  
+  webScr <- findFn('web scraping')
+  pS <- packageSum(webScr)
+  print(pS)
 }
 }
 \keyword{print}
