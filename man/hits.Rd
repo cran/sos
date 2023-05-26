@@ -40,12 +40,14 @@ hits(x)
 }
 %\references{}
 \examples{
-des1 <- findFn('differential equations', 1)
+des1 <- try(findFn('differential equations', 1))
 
+if(inherits(des1, 'try-error')){
 des1. <- matches(des1)
 des. <- list(nrow=nrow(des1), matches=attr(des1, 'matches'))
 \dontshow{stopifnot(}
 all.equal(des1., des.)
 \dontshow{)}
+}
 }
 \keyword{misc}

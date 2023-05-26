@@ -58,11 +58,12 @@ findFn2xls(x,
   \code{\link[WriteXLS]{WriteXLS}}
 }
 \examples{
-splineSearch <- findFn("spline", maxPages = 1)
+splineSearch <- try(findFn("spline", maxPages = 1))
+if(!inherits(splineSearch, 'try-error')){
+  writeFindFn2xls(splineSearch)
 
-writeFindFn2xls(splineSearch)
-
-findFn2xls(splineSearch, csv=TRUE)
+  findFn2xls(splineSearch, csv=TRUE)
+}
 }
 \keyword{print}
 

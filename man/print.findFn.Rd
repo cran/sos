@@ -64,14 +64,19 @@
   \code{\link[brew]{brew}}
 }
 \examples{
-splineSearch <- findFn("spline", maxPages = 2)
+splineSearch <- try(findFn("spline", maxPages = 2))
+
+if(!inherits(splineSearch, 'try-error')){
 if(!CRAN()){
   print(splineSearch, 'console')
   splineSearch # all columns in a browser
 }
-webScr <- findFn('web scraping')
+webScr <- try(findFn('web scraping'))
+if(!inherits(webScr, 'try-error')){
 if(!CRAN()){
   print(webScr)
+}
+}
 }
 }
 \keyword{print}

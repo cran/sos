@@ -92,8 +92,8 @@
   \code{\link[utils]{RSiteSearch}}
 }
 \examples{
-  z <- findFn("spline", maxPages = 2)
-  summary(z, 2)
+  z <- try(findFn("spline", maxPages = 2))
+  if(!inherits(z, 'try-error'))summary(z, 2)
 }
 \keyword{methods}
 \keyword{print}

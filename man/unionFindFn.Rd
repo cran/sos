@@ -104,10 +104,12 @@ if(!CRAN()){
 
 \dontshow{
 # The following gave an error;  now fixed 2009.05.12
-x <- findFn("spline", maxPages = 1, quiet = TRUE)
-y <- findFn("winbugs", maxPages = 1, quiet = TRUE)
-xy <- intersectFindFn( x, y )
+x <- try(findFn("spline", maxPages = 1, quiet = TRUE))
+y <- try(findFn("winbugs", maxPages = 1, quiet = TRUE))
+if(!(inherits(x, 'try-error') ||
+     inherits(y, 'try-error'))){
+    xy <- intersectFindFn( x, y )
 }
-
+}
 }
 \keyword{misc}

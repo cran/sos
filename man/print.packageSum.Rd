@@ -66,23 +66,31 @@
   \code{\link[brew]{brew}}
 }
 \examples{
-splineHelp <- findFn("spline", maxPages = 2)
+splineHelp <- try(findFn("spline", maxPages = 2))
+
+if(!inherits(splineHelp, 'try-error')){
 splinePkgs <- packageSum(splineHelp)
 if(!CRAN()){
   print(splinePkgs, 'console')
   splinePkgs # all columns in a browser
 
-  des1 <- findFn('differential equations', 1)
-  de1 <- findFn('differential equation', 1)
+  des1 <- try(findFn('differential equations', 1))
+  de1 <- try(findFn('differential equation', 1))
 # each retrieves 1 page of 20 hits
 # but not the same 20
 
+  if(!(inherits(des1, 'try-error') ||
+       inherits(de1, 'try-error'))){
   de.s <- unionFindFn(des1, de1)
   de.s
 # Other example:  
-  webScr <- findFn('web scraping')
+  webScr <- try(findFn('web scraping'))
+  if(!inherits(webScr, 'try-error')){
   pS <- packageSum(webScr)
   print(pS)
+}
+}
+}
 }
 }
 \keyword{print}

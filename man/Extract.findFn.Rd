@@ -52,10 +52,13 @@
   \code{\link{data.frame}}
 }
 \examples{
-  z <- findFn("spline", maxPages = 2)
+  z <- try(findFn("spline", maxPages = 2))
+  
+  if(!inherits(z, "try-error")){
 
   z1 <- z[1,]
 
   z.2 <- z[, 2]
+  }
 }
 \keyword{methods}

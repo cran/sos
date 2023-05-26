@@ -16,7 +16,6 @@
 \SweaveOpts{keep.source=TRUE}
 <<echo=FALSE>>=
 options(width = 60, useFancyQuotes = FALSE)
-options(repos=c(CRAN="http://cran.cnr.berkeley.edu"))
 @
 \begin{document}
 %\SweaveOpts{concordance=TRUE}
@@ -213,7 +212,8 @@ splineHits <- getRSiteSearchHits("http://search.r-project.org/cgi-bin/namazu.cgi
 @
 (using the {\tt RSiteSearch} function in the \pkg{utils} package).
 While preparing this manuscript, this command identified
-\Sexpr{splineHits$hits} documents as of \Sexpr{splineHits$date}.  That is too many.  It can be
+\Sexpr{splineHits$hits} documents as of 
+\Sexpr{splineHits$date}.  That is too many.  It can be
 restricted to functions as follows:
 <<RSiteSearch-spline-fun,results=hide>>=
 if(!CRAN()){
@@ -268,7 +268,7 @@ gCount6 <- g[6, "Count"]
 This returned a {\tt "findFn"} object identifying \Sexpr{nrow(g)} help pages.
 When this was
 run while preparing this manuscript, the sixth row was
-{\tt \Sexpr{gFunc6}} in the
+{\tt \Sexpr{gsub("_", "\\\\\\\\_", gFunc6)}} in the
 \pkg{\Sexpr{gPac6}} package, which has a {\tt Score} of \Sexpr{gScore6}.
 (On another day, the results could be different, because
 CRAN changes over time.)  This was the sixth row in this

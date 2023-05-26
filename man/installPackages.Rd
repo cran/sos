@@ -73,7 +73,9 @@ installPackages(x, minCount, ...)
 ##
 ## 1.  findFn object
 ##
-spl <- findFn("spline", maxPages = 2)
+spl <- try(findFn("spline", maxPages = 2))
+
+if(!inherits(spl, "try-error")){
 # check the code but do not install anything:
 installPackages(spl, minCount=spl[1, 'Count']+1)
 
@@ -98,6 +100,6 @@ installPackages(splS, splS[1, 'Count']+1)
 if (interactive()) {
 installPackages(splS, 1)
 }
-
+}
 }
 \keyword{package}

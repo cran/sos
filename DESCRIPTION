@@ -1,7 +1,7 @@
 Package: sos
 Title: Search Contributed R Packages, Sort by Package
-Version: 2.1-4
-Date: 2022-03-29
+Version: 2.1-7
+Date: 2023-05-26
 Author: Spencer Graves [cre, aut, cph], 
     Sundar Dorai-Raj [aut], and Romain Francois [ctb]
 Maintainer: Spencer Graves <spencer.graves@prodsyse.com>
@@ -11,6 +11,6 @@ Depends: brew
 Suggests: RODBC, WriteXLS, testthat
 Language: en-us
 NeedsCompilation: no
-Packaged: 2022-04-01 02:22:19 UTC; spenc
+Packaged: 2023-05-26 19:52:12 UTC; sg
 Repository: CRAN
-Date/Publication: 2022-04-01 04:10:02 UTC
+Date/Publication: 2023-05-26 20:40:02 UTC

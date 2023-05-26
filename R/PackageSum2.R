@@ -54,7 +54,7 @@ PackageSum2.data.frame <- function(x,
                                       lib.loc=lib.loc)
       pkgHelp <- try(utils::help(package=x$Package[ip], 
                       lib.loc=lib.loc, help_type='text'))
-      if(class(pkgHelp) != 'try-error'){
+      if(!inherits(pkgHelp, 'try-error')){
         for(ic in seq(1, length=nf)){
           if(fields[ic] == "Packaged"){
             if(is.null(pkgDesci$Packaged)){

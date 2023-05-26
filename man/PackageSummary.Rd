@@ -14,8 +14,8 @@ PackageSummary(x, sortby=NULL)
 }
 \arguments{
   \item{x}{
-    a data.frame with columns \code{Package},
-    \code{Score}, and \code{Date}.
+    a \code{data.frame} with columns 
+    \code{Package}, \code{Score}, and \code{Date}.
   }
   \item{sortby}{
     a character vector specifying how the 
@@ -37,7 +37,8 @@ PackageSummary(x, sortby=NULL)
 }
 \details{
   1.  Convert \code{x['Package']} to character to
-  automatically drop any unused levels of a factor.  
+  automatically drop any unused levels of a 
+  \code{factor}.  
   
   2.  Compute \code{Count, TotalScore, and MaxScore}. 
   
