@@ -156,11 +156,19 @@ writeFindFn2xls <- function(x,
 ## 9.  Write 3 csv files
 ##
    f.xls <- regexpr('\\.xls', file.)
-    if(f.xls>0)file. <- substring(file., 1, f.xls-1)
+   if(f.xls>0)file. <- substring(file., 1, f.xls-1)
 #
-    file3 <- paste(file., c('-sum.csv', '.csv', '-call.csv'), sep='')
-    utils::write.csv(sum2, file3[1], ...)
-    utils::write.csv(x, file3[2], ...)
+   file3 <- paste(file., c('-sum.csv', '.csv', '-call.csv'), sep='')
+   utils::write.csv(sum2, file3[1], ...)
+#    utils::write.csv(x, file3[2], ...)
+# On 2024-06-28:     
+# Error in `[<-.data.frame`(`*tmp*`, needconv, 
+#    value = list(Count = c("83",  : 
+#    replacement element 1 has 526 rows, need 5264
+# SG analysis: This appears to be a new bug in write.csv
+# reported to r-devel with a couple of simple examples   
+# The following seems to work   
+    utils::write.csv(x2., file3[2], ...)
     utils::write.csv(cl, file3[3], ...)
   }
   return(invisible(file.))

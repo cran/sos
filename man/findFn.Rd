@@ -98,68 +98,58 @@ findFn(string, maxPages = 100, sortby = NULL,
   \item{\code{Columns}}{
 
     \itemize{
-      \item{\code{Count}}{ Total number of matches 
-        downloaded in this package}
-      \item{\code{MaxScore}}{
+      \item \code{Count} Total number of matches 
+        downloaded in this package
+      \item \code{MaxScore}
 	      maximum of the \code{Score} over all help
 	      pages selected within each \code{Package}. 
 	      See \code{Score} below or the Namazu
 	     	website (link below) for more information 
 	     	on how the score is determined.
-      }
-      \item{\code{TotalScore}}{
+      \item \code{TotalScore}
       	sum of the \code{Score} over all help 
       	pages selected within each \code{Package}. 
       	See \code{Score} below or the Namazu
       	website (link below) for more information 
       	on how the score is determined.
-      }
-      \item{\code{Package}}{
+      \item \code{Package}
       	Name of the package containing a help 
       	page meeting the search criteria
-      }
-      \item{\code{Function}}{
+      \item \code{Function}
       	Name of the help page found that meets 
       	the indicated search criterion.
-      }
-      \item{\code{Date}}{Date of the help page}
-      \item{\code{Score}}{
+      \item \code{Date} Date of the help page
+      \item \code{Score}
       	Score returned by \code{RSiteSearch},
       	discussed in the Namazu	website (link 
       	below).
-      }
-      \item{\code{Description}}{ 
+      \item \code{Description} 
         Title of the help page
-      }
-      \item{\code{Link}}{ 
+      \item \code{Link} 
         Universal Resource Locator (URL) for the 
         help page
-      }
     }
   }
 
   \item{\code{Attributes}}{
 
     \itemize{
-      \item{\code{matches}}{
+      \item\code{matches}
       	an integer = total number of matches found 
       	by the search.  This typically will exceed
       	the number of rows found, because the
       	search algorithm sometimes finds things 
       	that are not help pages for packages.
-      }
-      \item{\code{PackageSummary}}{
+      \item \code{PackageSummary}
       	a \code{data.frame} with one row for each 
       	package and columns \code{Package},
       	\code{Count}, \code{MaxScore}, 
       	\code{TotalScore}, and \code{Date}, sorted 
       	as in the \code{sort.} argument.
-      }
-      \item{\code{string}}{
+      \item \code{string}
       	the \code{string} argument in the 
       	\code{call}.
-      }
-      \item{\code{call}}{the matched call}
+      \item \code{call} the matched call
     }
   }
 }
@@ -181,6 +171,10 @@ findFn(string, maxPages = 100, sortby = NULL,
   \code{RSiteSearch} data base for many years.  
   Liaw and Baron created the \code{RSiteSearch} 
   function in the \code{utils} package. 
+  Thanks also to Patrice Kiener of `InModelia`
+  in Paris, France, who helped me fix some syntax 
+  problems stemming from changes in how an 
+  itemized list is described in a *.Rd file. 
 }
 \seealso{
   \code{\link{help.search}} to search only 

@@ -1,49 +1,38 @@
-### R code from vignette source 'sos.Rnw'
+## ----include = FALSE----------------------------------------------------------
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 
-###################################################
-### code chunk number 1: sos.Rnw:17-18
-###################################################
-options(width = 60, useFancyQuotes = FALSE)
+## ----setup--------------------------------------------------------------------
+library(sos)
 
+## ----Petal.Len----------------------------------------------------------------
+(Petal.Length <- help.search('Petal.Length'))
 
-###################################################
-### code chunk number 2: Petal.Length
-###################################################
-help.search('Petal.Length')
-
-
-###################################################
-### code chunk number 3: PL.RSiteSearch
-###################################################
+## ----PL.RSiteSearch-----------------------------------------------------------
 library(sos)
 if(!CRAN()){
   RSiteSearch('Petal.Length')
 }
 
-
-###################################################
-### code chunk number 4: Petal.Length.sos
-###################################################
+## ----PetalLen_sos-------------------------------------------------------------
+library(sos)
 PL <- findFn('Petal.Length')
+class(PL)
+dim(PL)
 
+## ----PL_sos-------------------------------------------------------------------
+PL. <- ???Petal.Length
+class(PL.)
+dim(PL.)
 
-###################################################
-### code chunk number 5: Petal.Length.sos.2
-###################################################
-PL <- ???Petal.Length
-
-
-###################################################
-### code chunk number 6: summary.PL
-###################################################
+## ----summary.PL,results='hide'------------------------------------------------
 # the following table has been
 # manually edited for clarity
 summary(PL)
 
-
-###################################################
-### code chunk number 7: summary.PL-print
-###################################################
+## ----summary.PL-print, echo=FALSE---------------------------------------------
 s <- summary(PL)
 blank <- data.frame(Package = "<...>",
       Count = "", MaxScore = "", TotalScore = "",
@@ -57,30 +46,18 @@ s$PackageSummary <- rbind(s$PackageSummary['yaImpute', ],
                           blank)
 print(s, row.names = FALSE)
 
-
-###################################################
-### code chunk number 8: Petal.Length.sos.3
-###################################################
+## ----Petal.Length.sos.3,results='hide'----------------------------------------
 PL[PL$Package == 'datasets', 'Function']
 
-
-###################################################
-### code chunk number 9: Petal.Length.sos.3-print
-###################################################
+## ----Petal.Length.sos.3-print,echo=FALSE--------------------------------------
 print(PL[PL$Package == 'datasets', 'Function'], max.levels = 0)
 
-
-###################################################
-### code chunk number 10: RSiteSearch-spline
-###################################################
+## ----RSiteSearch-spline,results='hide'----------------------------------------
 if(!CRAN()){
   RSiteSearch('spline')
 }
 
-
-###################################################
-### code chunk number 11: RSiteSearch-spline-numpages
-###################################################
+## ----RSiteSearch-spline-numpages,results='hide',echo=FALSE--------------------
 getRSiteSearchHits <- function(description) {
   today <- format(Sys.time(), "%Y-%m-%d")
   con <- url(description)
@@ -95,102 +72,67 @@ getRSiteSearchHits <- function(description) {
 }
 splineHits <- getRSiteSearchHits("http://search.r-project.org/cgi-bin/namazu.cgi?query=spline&max=20&result=normal&sort=score&idxname=Rhelp08&idxname=functions&idxname=views")
 
-
-###################################################
-### code chunk number 12: RSiteSearch-spline-fun
-###################################################
+## ----RSiteSearch-spline-fun, results='hide'-----------------------------------
 if(!CRAN()){
   RSiteSearch('spline', 'fun')
 }
 
-
-###################################################
-### code chunk number 13: RSiteSearch-spline-fun-numpages
-###################################################
+## ----RSiteSearch-spline-fun-numpages,results='hide',echo=FALSE----------------
 splineFunHits <- getRSiteSearchHits("http://search.r-project.org/cgi-bin/namazu.cgi?query=spline&max=20&result=normal&sort=score&idxname=functions")
 
+## ----RSiteSearch-spline-fun2,results='hide'-----------------------------------
+if(!CRAN()){
+  RSiteSearch('spline', 'fun')
+}
 
-###################################################
-### code chunk number 14: sos-spline
-###################################################
-splinePacs <- findFn('spline')
+## ----RSiteSearch-spline-fun2-numpages,results='hide',echo=FALSE---------------
+splineFunHits <- getRSiteSearchHits("http://search.r-project.org/cgi-bin/namazu.cgi?query=spline&max=20&result=normal&sort=score&idxname=functions")
 
-
-###################################################
-### code chunk number 15: sos-spline-maxPages-999
-###################################################
+## ----sos-spline-maxPages-999,results='hide'-----------------------------------
 splineAll <- findFn('spline', maxPages = 999)
 
-
-###################################################
-### code chunk number 16: sos-spline-subset
-###################################################
+## ----sos-spline-subset,results='hide'-----------------------------------------
 selSpl <- splineAll[, 'Function'] == 'spline'
 splineAll[selSpl, ]
 
-
-###################################################
-### code chunk number 17: sos-spline-grep
-###################################################
+## ----sos-spline-grep,results='hide'-------------------------------------------
 if(!CRAN()){
   grepFn('spline', splineAll, ignore.case = TRUE)
 }
 
-
-###################################################
-### code chunk number 18: sos-spline-grep2
-###################################################
+## ----sos-spline-grep2,results='hide',echo=FALSE-------------------------------
 g <- grepFn('spline', splineAll, ignore.case = TRUE)
 gFunc6 <- as.character(g[6, "Function"])
 gPac6 <- as.character(g[6, "Package"])
 gScore6 <- g[6, "Score"]
 gCount6 <- g[6, "Count"]
+# Apparently, nlevels(splineAll$Package)
+# splineAll$Package used to be a factor; not it's not
+nPacSplineAll <- length(table(splineAll$Package))
 
-
-###################################################
-### code chunk number 19: writeFindFn2xls-options
-###################################################
+## ----writeFindFn2xls-options,echo=FALSE---------------------------------------
 op <- options(width = 80)
 
-
-###################################################
-### code chunk number 20: writeFindFn2xls
-###################################################
+## ----writeFindFn2xls,results='hide'-------------------------------------------
 writeFindFn2xls(splineAll)
 
-
-###################################################
-### code chunk number 21: writeFindFn2xls-options2
-###################################################
+## ----writeFindFn2xls-options2,echo=FALSE--------------------------------------
 options(op)
 
-
-###################################################
-### code chunk number 22: install-and-write-options
-###################################################
+## ----install-and-write-options,echo=FALSE-------------------------------------
 op <- options(width=80)
 
-
-###################################################
-### code chunk number 23: install-and-write
-###################################################
+## ----install-and-write,results='hide'-----------------------------------------
 splineAll <- findFn('spline', maxPages = 999)
 # Do not include in auto test
 #installPackages(splineAll)
 writeFindFn2xls(splineAll)
 
-
-###################################################
-### code chunk number 24: install-and-write-options-undo
-###################################################
+## ----install-and-write-options-undo,echo=FALSE--------------------------------
 options(op)
 
-
-###################################################
-### code chunk number 25: differntial-equations
-###################################################
+## ----differntial-equations,results='hide'-------------------------------------
 de <- findFn('differential equation')
 des <- findFn('differential equations')
 de. <- de | des
-
 

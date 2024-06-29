@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Spencer Graves, Sundar Dorai-Raj, and Romain François" />
+
+<meta name="date" content="2024-06-28" />
+
+<title>Searching help pages of R packages</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Searching help pages of R packages</h1>
+<h4 class="author">Spencer Graves, Sundar Dorai-Raj, and Romain
+François</h4>
+<h4 class="date">2024-06-28</h4>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(sos)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Loading required package: brew</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;sos&#39;</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:utils&#39;:</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt;     ?</span></span></code></pre></div>
+<p>This vignette was originally published in <em>The R Journal</em>,
+vol. 1(2) in 2009. The package and this vignette have been changed since
+then to make the package easier to use and to adjust to changes in the R
+ecosystem.</p>
+<div id="abstract" class="section level2">
+<h2>Abstract</h2>
+<p>The <code>sos</code> package provides a means to quickly and flexibly
+search the help pages of contributed packages, finding functions and
+datasets in seconds or minutes that could not be found in hours or days
+by any other means we know. Its <code>findFn</code> function searches <a href="https://search.r-project.org">the search site
+<code>https://search.r-project.org</code></a> used by the <a href="https://stat.ethz.ch/R-manual/R-devel/library/utils/html/RSiteSearch.html"><code>RSiteSearch</code></a>
+function but returns the matches in a <a href="https://www.stat.ethz.ch/R-manual/R-devel/library/base/html/data.frame.html"><code>data.frame</code></a>
+of class <code>findFn</code>, which can be further manipulated by other
+<code>sos</code> functions to produce, for example, an Excel file that
+starts with a summary sheet that makes it relatively easy to prioritize
+alternative packages for further study. As such, it provides a very
+powerful way to do a literature search for functions and packages
+relevant to a particular topic of interest and could become virtually
+mandatory for authors of new packages or papers in publications such as
+<em>The R Journal</em> and the <em>Journal of Statistical
+Software</em>.</p>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The <code>sos</code> package provides a means to quickly and flexibly
+search the help pages of contributed packages, finding functions and
+datasets in seconds or minutes that could not be found in hours or days
+by any other means we know.</p>
+<p>The main capability of this package is the <code>findFn</code>
+function, which scans the <em>function</em> entries in the
+<code>RSiteSearch</code> database, created originally by Jonathan
+Baron,<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
+It returns the matches in a <code>data.frame</code> of class
+<code>findFn</code>. This database includes options to search the help
+pages of R packages contributed to CRAN (the <a href="https://cran.r-project.org">Comprehensive R Archive Network</a>)
+plus a few other publicly available packages, as well as selected
+mailing list archives—primarily R-help. The <code>findFn</code> function
+focuses only on the <em>help pages</em> in this database, ignoring the
+R-help archives. (CRAN grew from 1700 contributed packages and bundles
+on 2009-03-11 to 1954 on 2009-09-18, adding over 40 packages per day, an
+annual growth rate of 31 percent.)</p>
+<p>The <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/print.html"><code>print</code></a>
+method for objects of class <code>findFn</code> displays the results as
+two tables in the default web browser.</p>
+<ul>
+<li>The first is the table of individual help pages with links to those
+help pages, sorted by package. The key benefit of this is that they
+results are sorted by package, displaying first the results from the
+package with the most matches. This behavior differs from that of the
+<code>RSiteSearch</code> function in the <a href="https://stat.ethz.ch/R-manual/R-devel/library/utils/html/00Index.html"><code>utils</code></a>
+package in more ways than the sort order. First, <code>findFn</code>
+returns the results in R as a <code>data.frame</code>, which can be
+further manipulated. Second, the ultimate display in a web browser is a
+table, unlike the list produced by <code>RSiteSearch</code>.</li>
+<li>The second table is a package summary.</li>
+</ul>
+<p>Other <code>sos</code> functions provide summaries with one line for
+each package, support the union and intersection of <code>findFn</code>
+objects, and translate a <code>findFn</code> object into an Excel file
+with three sheets:</p>
+</div>
+<div id="packagesum2-which-provides-an-enhanced-summary-of-the-packages-with-matches" class="section level1">
+<h1><strong>PackageSum2</strong>, which provides an enhanced summary of
+the packages with matches,</h1>
+</div>
+<div id="the-findfn-table-itself-and" class="section level1">
+<h1>the <strong>findFn</strong> table itself, and</h1>
+</div>
+<div id="the-call-used-to-produce-it." class="section level1">
+<h1>(the <strong>call</strong> used to produce it.</h1>
+<p>Three examples are considered below:<br />
+* First we find a data set containing a variable
+<code>Petal.Length</code>}<code>.  * Second, we study R capabilities for splines, including looking for a function named</code>spline`.<br />
+* Third, we search for contributed R packages with capabilities for
+solving differential equations.</p>
+<div id="finding-a-variable-in-a-data-set" class="section level2">
+<h2>Finding a variable in a data set</h2>
+<p>Chambers (2009)<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> uses a variable <code>Petal.Length</code>
+from a famous Fisher data set but without naming the data set nor
+indicating where it can be found nor even if it exists in any
+contributed R package. The sample code he provides does not work by
+itself. To get his code to work to produce his Figure 7.2, we must first
+obtain a copy of this famous data set in a format compatible with his
+code.</p>
+<p>To look for this data set, one might first try the <a href="https://stat.ethz.ch/R-manual/R-patched/library/utils/html/help.search.html"><code>help.search</code></a>
+function. Unfortunately, this function returns nothing in this case:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>(Petal.Length <span class="ot">&lt;-</span> <span class="fu">help.search</span>(<span class="st">&#39;Petal.Length&#39;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; No vignettes or demos or help files found with alias or concept or</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; title matching &#39;Petal.Length&#39; using regular expression matching.</span></span></code></pre></div>
+<p>When this failed, many users might then try</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(sos)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">CRAN</span>()){</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">RSiteSearch</span>(<span class="st">&#39;Petal.Length&#39;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; A search query has been submitted to https://search.r-project.org</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; The results page should open in your browser shortly</span></span></code></pre></div>
+<p>This produced 80 matches when it was tried one day (and 62 matches a
+few months later).</p>
+<p><code>RSiteSearch(&#39;Petal.Length&#39;, &#39;function&#39;)</code> will identify
+only the help pages. We can get something similar and for many purposes
+more useful, as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(sos)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>PL <span class="ot">&lt;-</span> <span class="fu">findFn</span>(<span class="st">&#39;Petal.Length&#39;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; found 200 matches;  retrieving 10 pages</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 2 3 4 5 6 7 8 9 10 </span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Downloaded 200 links in 129 packages.</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">class</span>(PL)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;findFn&quot;     &quot;data.frame&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">dim</span>(PL)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] 200  10</span></span></code></pre></div>
+<p><code>PL</code> is a data frame of class <code>findFn</code>
+identifying all the help pages in the <code>RSiteSearch</code> database
+matching the search term (unless the number of matches exceeds the
+<code>20*maxPages</code> argument of <code>findFn</code>, assuming 20
+links per page). An alias for <code>findFn</code> is <code>???</code>.
+Thus, this same search can be performed as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>PL. <span class="ot">&lt;-</span> ???Petal.Length</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; found 200 matches;  retrieving 10 pages</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; 2 3 4 5 6 7 8 9 10 </span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Downloaded 200 links in 129 packages.</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">class</span>(PL.)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;findFn&quot;     &quot;data.frame&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">dim</span>(PL.)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1] 200  10</span></span></code></pre></div>
+<p>(The <code>???</code> alias only works in an assignment, so to print
+immediately, you need something like
+<code>(PL &lt;- ???Petal.Length)</code>.)</p>
+<p>The <code>data.frame</code>s <code>PL</code> and <code>PL.</code>
+should be identical unless the search site
+<code>https://search.r-project.org</code> changes in the time between
+these two searches.</p>
+<p>Both <code>data.frame</code>s have columns <code>Count</code>,
+<code>MaxScore</code>, <code>TotalScore</code>, <code>Package</code>,
+<code>Function</code>, <code>Date</code>, <code>Score</code>,
+<code>Description</code>, and <code>Link</code>. <code>Function</code>
+is the name of the <em>help page, not</em> the name of the function for
+two reasons:</p>
+</div>
+</div>
+<div id="multiple-functions-may-be-documented-on-a-single" class="section level1">
+<h1>Multiple functions may be documented on a single</h1>
+<p>help page. # Some help pages document other things such as data
+sets.</p>
+<p><code>Score</code> is the index of the strength of the match. It is
+used by the <code>RSiteSearch</code> database to decide which items to
+display first. <code>Package</code> is the name of the package
+containing <code>Function</code>. <code>Count</code> gives the total
+number of matches in <code>Package</code> found in this
+<code>findFn</code> call. By default, the <code>findFn</code> object is
+sorted by <code>Count</code>, <code>MaxScore</code>,
+<code>TotalScore</code>, and <code>Package</code> (to place the most
+important <code>Package</code> first), then by
+<code>Score</code>}<code>and</code>Function`.</p>
+<p>The <code>summary</code> method for an object of class
+<code>FindFn</code> prints a table giving for each <code>Package</code>
+the <code>Count</code> (number of matches), <code>MaxScore</code> (max
+of <code>Score</code>), <code>TotalScore</code> (sum of
+<code>Score</code>), and <code>Date</code>, sorted like a Pareto chart
+to place the <code>Package</code> with the most help pages first:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># the following table has been</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co"># manually edited for clarity</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">summary</span>(PL)</span></code></pre></div>
+<pre><code>#&gt; $PackageSummary
+#&gt;  Package Count MaxScore TotalScore Date pkgLink
+#&gt;     &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt; &lt;NA&gt;    &lt;NA&gt;
+#&gt;    &lt;...&gt;                                       
+#&gt;     &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt; &lt;NA&gt;    &lt;NA&gt;
+#&gt;    &lt;...&gt;                                       
+#&gt; 
+#&gt; $minPackages
+#&gt; [1] 12
+#&gt; 
+#&gt; $minCount
+#&gt; [1] 3
+#&gt; 
+#&gt; $matches
+#&gt; [1] 200
+#&gt; 
+#&gt; $nrow
+#&gt; [1] 200
+#&gt; 
+#&gt; $nPackages
+#&gt; [1] 129
+#&gt; 
+#&gt; $string
+#&gt; [1] &quot;Petal.Length&quot;
+#&gt; 
+#&gt; $call
+#&gt; findFn(string = &quot;Petal.Length&quot;)
+#&gt; 
+#&gt; attr(,&quot;class&quot;)
+#&gt; [1] &quot;summary.findFn&quot; &quot;list&quot;</code></pre>
+<p>(The <code>Date</code> here is the date that this package was added
+to the <code>RSiteSearch</code> database.)</p>
+<p>One of the listed packages is <code>datasets</code>. Since it is part
+of the default R distribution, we decide to look there first. We can
+select that row of <code>PL</code> just like we would select a row from
+any other data frame:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>PL[PL<span class="sc">$</span>Package <span class="sc">==</span> <span class="st">&#39;datasets&#39;</span>, <span class="st">&#39;Function&#39;</span>]</span></code></pre></div>
+<pre><code>#&gt; [1] &quot;iris&quot;</code></pre>
+<p>Problem solved in less than a minute! Any other method known to the
+present authors would have taken substantially more time.</p>
+<div id="finding-packages-with-spline-capabilities" class="section level2">
+<h2>Finding packages with spline capabilities</h2>
+<p>In 2005, the lead author of this article decided he needed to learn
+more about splines. A literature search began as follows:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">CRAN</span>()){</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">RSiteSearch</span>(<span class="st">&#39;spline&#39;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>(using the <code>RSiteSearch</code> function in the
+<code>utils</code> package). While preparing this manuscript, this
+command identified 1526 documents one day. That is too many. It can be
+restricted to functions as follows:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">CRAN</span>()){</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="fu">RSiteSearch</span>(<span class="st">&#39;spline&#39;</span>, <span class="st">&#39;fun&#39;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>This identified only 739 one day (631 earlier). That’s an improvement
+over 739 but is still too many for convenient analysis. To get a quick
+overview of these matches, can proceed as follows:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">CRAN</span>()){</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="fu">RSiteSearch</span>(<span class="st">&#39;spline&#39;</span>, <span class="st">&#39;fun&#39;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>This downloaded a summary of the highest-scoring help pages in the
+<code>RSiteSearch</code> data base in roughly 5-15 seconds, depending on
+the speeds of the database and Internet connection.</p>
+<p>If the search results exceeds the <code>maxPages</code> argument,
+increase that argument from its default 100:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>splineAll <span class="ot">&lt;-</span> <span class="fu">findFn</span>(<span class="st">&#39;spline&#39;</span>, <span class="at">maxPages =</span> <span class="dv">999</span>)</span></code></pre></div>
+<p>If we want to find a function named <code>spline</code>, we can
+proceed as follows:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>selSpl <span class="ot">&lt;-</span> splineAll[, <span class="st">&#39;Function&#39;</span>] <span class="sc">==</span> <span class="st">&#39;spline&#39;</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>splineAll[selSpl, ]</span></code></pre></div>
+<p>This has 0 rows, because there is no help page named
+<code>spline</code>. This does <em>not</em> mean that no function with
+that exact name exists, only that no <em>help page</em> has that
+name.</p>
+<p>To look for help pages whose name <em>includes</em> the characters
+<code>spline</code>, we can use <code>grepFn</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">CRAN</span>()){</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">grepFn</span>(<span class="st">&#39;spline&#39;</span>, splineAll, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>This returned a <code>findFn</code> object identifying 426 help
+pages. When this was run while preparing this manuscript, the sixth row
+was <code>lspline</code> in the <code>assist</code> package, which has a
+Score of 1. (On another day, the results could be different, because the
+<code>RSiteSearch</code> database changes over time.) This was the sixth
+row in this table, because it is in the <code>assist</code> package,
+which had a total of 34 help pages matching the search term, but this
+was the only one whose name matched the <code>pattern</code> passed to
+<code>grepFn</code>.</p>
+<p>We could next <code>print</code> the <code>splineAll</code>
+<code>findFn</code> object. However, it may not be easy to digest a
+table with 739 rows (or however many rows it produces when you run
+it).</p>
+<p><code>summary(splineAll)</code> would tell us that the 5264 help
+pages came from 1222 different packages and display the first
+<code>minPackages = 12</code> such packages. (If other packages had the
+same number of matches as the twelfth package, they would also appear in
+this summary.
+<code>minPackages is an argument of the</code>summary.findFn` function
+and can be changed if the user wishes.)</p>
+<p>A more complete view can be obtained in MS Excel format using the
+<code>writeFindFn2xls</code> function:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">writeFindFn2xls</span>(splineAll)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt; Loading required package: WriteXLS</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; A system perl installation found in /opt/local/bin/perl</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt; The perl modules included with WriteXLS are located in /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/WriteXLS/Perl</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt; All required Perl modules were found.</span></span></code></pre></div>
+<p>(<code>findFn2xls</code> is an alias for
+<code>writeFindFn2xls</code>. We use the longer version here, as it may
+be easier to remember.)</p>
+<p>If either the <code>WriteXLS</code> package and compatible Perl code
+are properly installed or if you are running Windows with the
+<code>RODBC</code> package, this produces an Excel file in the working
+directory named <code>splineAll.xls</code>, containing the following
+three worksheets:</p>
+<ul>
+<li>The <strong>PackageSum2</strong> sheet includes one line for each
+package with a matching help page, enhanced by providing information for
+locally installed packages not available in the <code>findFn</code>
+object.</li>
+<li>The <strong>findFn</strong> sheet contains the search results.</li>
+<li>The <strong>call</strong> sheet gives the call to
+<code>findFn</code> that generated these search results.</li>
+</ul>
+<p>If <code>writeFindFn2xls</code> cannot produce an Excel file with
+your installation, it will write three
+<code>csv</code>}<code>files with names</code>splineAll-sum.csv<code>}</code>,
+<code>splineAll.csv</code>, and <code>splineAll-call.csv</code>,
+corresponding to the three worksheets described above. (Users who do not
+have MS Excel may like to know that Open Office Calc can open a standard
+<code>xls</code>}` file and can similarly create such files.)<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>The <strong>PackageSum2</strong> sheet is created by the
+<strong>PackageSum2</strong> function, which adds information from
+installed packages not obtained by <code>findFn</code>. The extended
+summary includes the package title and date, plus the names of the
+author and the maintainer, the number of help pages in the package, and
+the name(s) of any vignettes. This can be quite valuable in prioritizing
+packages for further study. Other things being equal, we think most
+people would rather learn how to use a package being actively maintained
+than one that has not changed in five years. Similarly, we might prefer
+to study a capability in a larger package than a smaller one, because
+the rest of the package might provide other useful tools or a broader
+context for understanding the capability of interest.</p>
+<p>These extra fields, package title, etc., are blank for packages in
+the <code>findFn</code> object not installed locally. For installed
+packages, the <code>Date</code> refers to the <em>packaged</em> date
+rather than the date the package was added to the
+<code>RSiteSearch</code> database.</p>
+<p>Therefore, the value of <code>PackageSum2</code> can be increased by
+running <a href="https://stat.ethz.ch/R-manual/R-devel/library/utils/html/install.packages.html"><code>install.packages</code></a>
+(from the <a href="https://stat.ethz.ch/R-manual/R-devel/library/utils/html/00Index.html"><code>utils</code></a>
+package) to install packages not currently available locally and
+<code>update.packages</code> to ensure the local availability of the
+latest versions for all installed packages.</p>
+<p>To make it easier to add desired packages, the <code>sos</code>
+package includes an <code>installPackages</code> function, which checks
+all the packages in a <code>findFn</code> object for which the number of
+matches exceeds a second argument <code>minCount</code> and installs any
+of those not already available locally; the default
+<code>minCount</code> is the square root of the largest
+<code>Count</code>. Therefore, the results from <code>PackageSum2</code>
+and the <code>PackageSum2</code> sheet created by
+<code>writeFindFn2xls</code> will typically contain more information
+after running <code>installPackages</code> than before.</p>
+<p>To summarize, three lines of code gave us a very powerful summary of
+spline capabilities in contributed R packages:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>splineAll <span class="ot">&lt;-</span> <span class="fu">findFn</span>(<span class="st">&#39;spline&#39;</span>, <span class="at">maxPages =</span> <span class="dv">999</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co"># Do not include in auto test</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#installPackages(splineAll)</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="fu">writeFindFn2xls</span>(splineAll)</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; A system perl installation found in /opt/local/bin/perl</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt; The perl modules included with WriteXLS are located in /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/WriteXLS/Perl</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="co">#&gt; All required Perl modules were found.</span></span></code></pre></div>
+<p>The resulting <code>splineAll.xls</code> file can help establish
+priorities for further study of the different packages and functions. An
+analysis of this nature almost four years ago led the lead author to the
+<code>fda</code> package and its companion books, which further led to a
+collaboration that has produced joint presentations at three different
+conferences and a joint book.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+</div>
+<div id="combining-search-results" class="section level2">
+<h2>Combining search results</h2>
+<p>The lead author of this article recently gave an invited presentation
+on “Fitting Nonlinear Differential Equations to Data in R”^[<a href="http://people.stat.sfu.ca/~dac5/workshop09/Spencer_Graves.html">Workshop
+on Statistical Methods for Dynamic System Models, Vancouver, 2009:
+<code>http://stat.sfu.ca/~dac5/workshop09/Spencer_Graves.html</code></a>.
+A key part of preparing for that presentation was a search of
+contributed R code, which proceeded roughly as follows:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>de <span class="ot">&lt;-</span> <span class="fu">findFn</span>(<span class="st">&#39;differential equation&#39;</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>des <span class="ot">&lt;-</span> <span class="fu">findFn</span>(<span class="st">&#39;differential equations&#39;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>de. <span class="ot">&lt;-</span> de <span class="sc">|</span> des</span></code></pre></div>
+<p>When this was run in 2009, the object <code>de</code> had 53 rows,
+while <code>des</code> had 105. If this search engine were simply
+searching for character strings, <code>de</code> would be
+<em>larger</em> than <code>des</code>; in this case, it was smaller. The
+last object <code>de.</code> is the union of <code>de</code> and
+<code>des</code>; <strong>|</strong> is an alias for
+<code>unionFindFn</code>. In 2009 the <code>de.</code> object had 124
+rows. That suggests that the corresponding intersection must have had
+(53+105-124) = 34 rows. This can be confirmed via
+<code>nrow(de \&amp; des)</code>. (<strong>&amp;</strong> is an alias
+for <code>intersectFindFn</code>.)</p>
+<p>To make everything in <code>de.</code> locally available, we can use
+<code>installPackages(de., minCount = 1)</code>. This installed all
+referenced packages except <code>rmutil</code> and a dependency
+<code>Biobase</code>, which were not available on CRAN but are included
+in the <code>RSiteSearch</code> database.</p>
+<p>Next, <code>writeFindFn2xls(de.)</code> produced a file
+<code>de..xls</code> in the working directory. [(]The working directory
+can be identified via <code>getwd()</code>.]</p>
+<p>The <code>PackageSum2</code> sheet of that Excel file provided a
+quick summary of packages with matches, sorted to put the package with
+the most matches first. In this case, this first package was
+<code>deSolve</code>, which provides, “General solvers for initial value
+problems of ordinary differential equations (ODE), partial differential
+equations (PDE) and differential algebraic equations (DAE)”. This is
+clearly quite relevant to the subject. The second package was
+<code>PKfit</code>, which is “A Data Analysis Tool for
+Pharmacokinetics”. This may be too specialized for general use. I
+therefore would not want to study this first unless my primary interest
+here was in pharmacokinetic models.</p>
+<p>By studying the summary page in this way, I was able to decide
+relatively quickly which packages I should consider first. In making
+this decision, I gave more weight to packages with one or more vignettes
+and less weight to those where the <code>Date</code> was old, indicating
+that the code was not being actively maintained and updated. I also
+checked the conference information to make sure I did not embarrass
+myself by overlooking a package authored or maintained by another
+invited speaker.</p>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
+<p>We have found <code>findFn</code> in the <code>sos</code> package to
+be very quick, efficient and effective for finding things in contributed
+packages. The <code>grepFn</code> function helps quickly look for
+functions (or help pages) with particular names. The capabilities in
+<code>unionFindFn</code> and <code>intersectFindFn</code> (especially
+via their **|*}<strong> and </strong>&amp;** aliases) can be quite
+useful where a single search term seems inadequate; they make it easy to
+combine multiple searches to produce something closer to what is
+desired. An example of this was provided with searching for both
+<code>differential equation&#39;&#39; and</code>differential equations’’.</p>
+<p>The <strong>PackageSum2</strong> sheet of an Excel file produced by
+<code>writeFindFn2xls</code> (after also running the
+<code>installPackages</code> function) is quite valuable for
+understanding the general capabilities available for a particular topic.
+This could be of great value for authors to find what is already
+available so they don’t duplicate something that already exists and so
+their new contributions appropriately consider the contents of other
+packages.</p>
+<p>The <code>findFn</code> capability can also reduce the risk of “the
+researcher’s nightmare” of being told after substantial work that
+someone else has already done it.</p>
+</div>
+<div id="acknowledgments" class="section level2">
+<h2>Acknowledgments</h2>
+<p>The capabilities described here extend the power of the R Site Search
+search engine originally maintained by Jonathan Baron. Without
+Prof. Baron’s support, it would not have been feasible to develop the
+features described here. Duncan Murdoch, Marc Schwarz, Dirk
+Eddelbuettel, Gabor Grothendiek and anonymous referees contributed
+suggestions for improvement, but of course can not be blamed for any
+deficiencies. The collaboration required to produce the current
+<code>sos</code> package was greatly facilitated by R-Forge<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. The
+<code>sos</code> package is part of the R Site Search project hosted
+there. This project also includes code for a Firefox extension to
+simplify the process of finding information about R from within Firefox.
+This Firefox extension is still being developed with the current version
+downloadable from <a href="http://addictedtor.free.fr/rsitesearch/"><code>http://addictedtor.free.fr/rsitesearch</code></a>.</p>
+<p>Spencer Graves EffectiveDefense.org Kansas City, Missouri email <a href="mailto:spencer.graves@effectivedefense.org" class="email">spencer.graves@effectivedefense.org</a></p>
+<p>Sundar Dorai-Raj Google Mountain View, CA email <a href="mailto:sdorairaj@google.com" class="email">sdorairaj@google.com</a></p>
+<p>Romain François Independent R Consultant Montpellier, France email <a href="mailto:francoisromain@free.fr" class="email">francoisromain@free.fr</a></p>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p><span class="citation">@JB09URL</span><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><span class="citation">@JC09</span><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p><span class="citation">@CALC09MAN</span><a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p><span class="citation">@RHG09</span><a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p><span class="citation">@RFORGE09URL</span><a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

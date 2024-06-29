@@ -8,7 +8,7 @@
 \usage{
 \method{[}{findFn}(x, i, j,
     drop = 
-    if (missing(i)) TRUE else length(cols) == 1)
+    if (missing(i)) TRUE else length(j) == 1)
 %]
 }
 \arguments{
@@ -55,10 +55,18 @@
   z <- try(findFn("spline", maxPages = 2))
   
   if(!inherits(z, "try-error")){
-
+# one row
   z1 <- z[1,]
 
+# one column 
   z.2 <- z[, 2]
+# 
+  z.2a <- z[2]
+  \dontshow{stopifnot(}
+    all.equal(z.2, z.2a)
+  \dontshow{)}
+# data.frame with one column
+  z.2d <- z[, 2, drop=FALSE]
   }
 }
 \keyword{methods}

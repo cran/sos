@@ -1,16 +1,19 @@
 Package: sos
 Title: Search Contributed R Packages, Sort by Package
-Version: 2.1-7
-Date: 2023-05-26
+Version: 2.1-8
+Date: 2024-06-28
 Author: Spencer Graves [cre, aut, cph], 
     Sundar Dorai-Raj [aut], and Romain Francois [ctb]
 Maintainer: Spencer Graves <spencer.graves@prodsyse.com>
 Description: Search contributed R packages, sort by package.
 License: GPL (>= 2)
-Depends: brew
-Suggests: RODBC, WriteXLS, testthat
+Depends: R (>= 3.5.0), brew
+Suggests: RODBC, WriteXLS, testthat, knitr, rmarkdown
 Language: en-us
+URL: https://github.com/sbgraves237/sos
+BugReports: https://github.com/sbgraves237/sos/issues
+VignetteBuilder: knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2023-05-26 19:52:12 UTC; sg
+Packaged: 2024-06-29 17:27:35 UTC; sg
 Repository: CRAN
-Date/Publication: 2023-05-26 20:40:02 UTC
+Date/Publication: 2024-06-29 18:40:02 UTC
